@@ -1,0 +1,225 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import {
+  PASSWORD_LETTERS,
+  PASSWORD_NUMBERS,
+  PASSWORD_SYMBOLS,
+} from "../constant.js";
+import { copyToClipBoard } from "../utils/copyToClipboard.js";
+
+const passwordGenerator = () => {
+  const [hidden, setHidden] = useState(false);
+  const [animation, setAnimation] = useState(false);
+  const [sliderValue, setSliderValue] = useState(8);
+  const [showCopiedStatus, setShowCopiedStatus] = useState(false);
+  const [generatedPassword, setGeneratedPassword] = useState("");
+  const selectedCharactersArray = ["", "", ""];
+  const [selectedCharacters, setSelectedCharacters] = useState(
+    selectedCharactersArray
+  );
+  const checkedStatusObj = {
+    letters: false,
+    numbers: false,
+    symbols: false,
+  };
+  const [checked, setChecked] = useState(checkedStatusObj);
+
+  const passwordGeneratorFunction = (charArray) => {
+    for (let i = 0; i < sliderValue; i++) {
+      const selectCharacterIndex = Math.floor(Math.random() * 3);
+
+      //check if anyone field is non-empty.
+      // console.log("first loop", charArray);
+      if (
+        charArray.some((feild) => {
+          return feild !== "";
+        })
+      ) {
+        // console.log("selectCharacterIndex : ", selectCharacterIndex);
+        let characterArray = charArray[selectCharacterIndex];
+        // console.log("before :", characterArray);
+        while (characterArray === "") {
+          //first choose the index btween(0,1,2)
+          // console.log("Inside while loop");
+          const selectCharIndex = Math.floor(Math.random() * 3);
+          characterArray = charArray[selectCharIndex];
+          // console.log("Inside while charValue :", characterArray);
+        }
+        //check again
+        // console.log("After array : ", characterArray);
+        //now take a randon index from letter/number/symbol
+        let min = 0;
+        let max = characterArray.length - 1;
+        let randomChar = Math.floor(Math.random() * (max - min + 1)) + min;
+        // console.log("randomChar : ", randomChar);
+        // console.log("choosen char : ", characterArray[randomChar]);
+        //then add it to the generatedPassword state->by first get the prevs vaule then add into it
+        setGeneratedPassword((prev) => prev + characterArray[randomChar]);
+      }
+      // setGeneratedPassword("");
+      // return;
+    }
+    //this will get which to choose letter/number/symbols
+    //once choosed
+  };
+  // console.log("Generated Password :", generatedPassword);
+  // console.log("Checked :", checked);
+  // console.log("SelectedCharacters :", selectedCharacters);
+
+  const handleCheckBoxChnage = (e) => {
+    // setUseEffectStartCounter(2)
+    setGeneratedPassword("");
+    console.log(e.target);
+    const key = e.target.id;
+    const index = parseInt(e.target.value, 10);
+    const newSelectedCharacters = [...selectedCharacters];
+    // console.log("This is with . notation",checked.key)
+    // console.log("This is with [] notation", checked[key]);
+    // console.log("This is index", index);
+    //add in the array if the checked[key] is false
+    if (!checked[key]) {
+      console.log("does it");
+
+      if (index === 0) {
+        newSelectedCharacters[0] = PASSWORD_LETTERS;
+      }
+      if (index === 1) {
+        newSelectedCharacters[1] = PASSWORD_NUMBERS;
+      }
+      if (index === 2) {
+        newSelectedCharacters[2] = PASSWORD_SYMBOLS;
+      }
+    } //if checked[Key] true remove from the array
+    else {
+      newSelectedCharacters[index] = "";
+    }
+
+    setSelectedCharacters(newSelectedCharacters);
+    console.log(newSelectedCharacters);
+    setChecked((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+    passwordGeneratorFunction(newSelectedCharacters);
+  };
+
+  const handleSliderChnage = (e) => {
+    // setUseEffectStartCounter(2);
+    setGeneratedPassword("");
+    setSliderValue(e.target.value);
+    passwordGeneratorFunction(selectedCharacters);
+  };
+
+  const handleCopyClick = async () => {
+    //get the display-password div element
+    const passwordDisplay = document.getElementById("password-display");
+    // console.log("Password Display : ",passwordDisplay.innerHTML)
+    const text = passwordDisplay.innerHTML;
+    copyToClipBoard(text);
+    setShowCopiedStatus(true);
+  };
+
+  useEffect(() => {
+    console.log("ehhhhhhhhhhhhhhhhhhhhhh");
+    if (showCopiedStatus) {
+      // setShowCopiedStatus(false);
+      setAnimation(false);
+
+      const hideTimer = setTimeout(() => {
+        console.log("Animation ?");
+        setAnimation(true); // Start slide-out animation
+        setTimeout(() => {
+          console.log("Animation ?");
+          setShowCopiedStatus(false);
+        }, 2000); // Allow animation to complete
+      }, 2000); // Toast visible duration
+
+      return () => clearTimeout(hideTimer);
+    }
+  }, [showCopiedStatus]);
+  return (
+    <div className="bg-blue-700 flex justify-center items-center h-screen">
+      <div className="bg-white w-6/12 h-8/12 rounded-4xl shadow-2xl overflow-hidden flex flex-col">
+        {/* Display Field + copy button div */}
+        <div className="bg-red-500 flex px-20 py-10 items-center">
+          <div className="flex-1 relative">
+            <div id="password-display" className="bg-green-500 p-2 rounded-md">
+              {generatedPassword || "Your Password Here"}
+            </div>
+            {showCopiedStatus && (
+              <p
+                className={`bg-yellow-500 px-2 py-1 text-sm w-fit absolute left-50 top-11 transition-all duration-1000 ${
+                  animation ? "sm:translate-y-5 opacity-0  " : ""
+                } rounded-md`}
+              >
+                Copied!
+              </p>
+            )}
+          </div>
+          <button
+            onClick={handleCopyClick}
+            className="bg-yellow-500 ml-2 p-2 rounded-md hover:cursor-pointer font-semibold hover:bg-yellow-400"
+          >
+            Copy
+          </button>
+        </div>
+        {/* container for length slidder + all char selector */}
+        <div className="bg-sky-500 flex-1 flex flex-col items-center justify-center gap-4">
+          <div className="bg-green-500 w-8/12">
+            <h2>Password Length: {sliderValue}</h2>
+            <input
+              type="range"
+              min="4"
+              max="32"
+              value={sliderValue}
+              onChange={handleSliderChnage}
+              className="w-full"
+            />
+            <div className="bg-red-500 flex justify-between font-semibold">
+              <p>4</p>
+              <p>32</p>
+            </div>
+          </div>
+          <div className="bg-pink-500 flex w-6/12 justify-between mt-8 p-2 font-semibold">
+            <div>
+              <input
+                type="checkbox"
+                id="letters"
+                checked={checked.letters}
+                onChange={handleCheckBoxChnage}
+                value={0}
+              />
+              <label className="ml-1">Letters</label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="numbers"
+                checked={checked.numbers}
+                onChange={handleCheckBoxChnage}
+                value={1}
+              />
+              <label className="ml-1">Numbers</label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="symbols"
+                checked={checked.symbols}
+                onChange={handleCheckBoxChnage}
+                value={2}
+              />
+              <label className="ml-1">Symbols</label>
+            </div>
+          </div>
+        </div>
+        <div className="py-8 flex justify-center text-white">
+          <button className="bg-green-500 px-3 py-2 rounded-lg">Create</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default passwordGenerator;
