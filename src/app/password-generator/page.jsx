@@ -2,14 +2,18 @@
 
 import { useEffect, useState } from "react";
 import {
+  BASE_URL,
   PASSWORD_LETTERS,
   PASSWORD_NUMBERS,
   PASSWORD_SYMBOLS,
 } from "../constant.js";
 import { copyToClipBoard } from "../utils/copyToClipboard.js";
+import PinForm from "../components/PinForm.jsx";
+import axios from "axios";
 
 const passwordGenerator = () => {
-  const [hidden, setHidden] = useState(false);
+  const [disablePinButton, setDisablePinButton] = useState(true);
+  const [showGeneratePinBox, setShowGeneratePinBox] = useState(false);
   const [animation, setAnimation] = useState(false);
   const [sliderValue, setSliderValue] = useState(8);
   const [showCopiedStatus, setShowCopiedStatus] = useState(false);
@@ -120,6 +124,34 @@ const passwordGenerator = () => {
     setShowCopiedStatus(true);
   };
 
+  const userPinExists = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/vault/pin-exists`, {
+        withCredentials: true,
+      });
+
+      return res.data.data.pinCreated;
+    } catch (error) {
+      console.error("Error while checking user Pin exists.");
+      return true;
+    }
+  };
+  const handleCreateClick = async () => {
+    //first check if pin is create
+    const res = await userPinExists();
+    //if not having pin
+    console.log("res", res);
+    if (!res) {
+      //if false
+      //show the generate pin button and also chage it from disable{true}to-> disabled{false}
+      setDisablePinButton(false);
+      //then call for creating pin
+    }
+  };
+  const handleGeneratePinClick = async () => {
+    setShowGeneratePinBox(true);
+  };
+
   useEffect(() => {
     console.log("ehhhhhhhhhhhhhhhhhhhhhh");
     if (showCopiedStatus) {
@@ -139,7 +171,20 @@ const passwordGenerator = () => {
     }
   }, [showCopiedStatus]);
   return (
-    <div className="bg-blue-700 flex justify-center items-center h-screen">
+    <div className="bg-blue-700 flex flex-col justify-center items-center h-screen">
+      <div className="mb-8 flex justify-end w-6/12">
+        <button
+          disabled={disablePinButton}
+          onClick={handleGeneratePinClick}
+          className={`${
+            disablePinButton
+              ? "hover:cursor-not-allowed hover:bg-green-400 hover:text-gray-600 bg-green-300 text-gray-500"
+              : "bg-green-500 hover:cursor-pointer hover:bg-green-600 text-white"
+          }  px-3 py-2 rounded-md  font-semibold text-sm`}
+        >
+          Generate Pin
+        </button>
+      </div>
       <div className="bg-white w-6/12 h-8/12 rounded-4xl shadow-2xl overflow-hidden flex flex-col">
         {/* Display Field + copy button div */}
         <div className="bg-red-500 flex px-20 py-10 items-center">
@@ -215,9 +260,20 @@ const passwordGenerator = () => {
           </div>
         </div>
         <div className="py-8 flex justify-center text-white">
-          <button className="bg-green-500 px-3 py-2 rounded-lg">Create</button>
+          <button
+            onClick={handleCreateClick}
+            className="bg-green-500 px-3 py-2 rounded-lg hover:cursor-pointer hover:bg-green-600 hover:text-gray-300"
+          >
+            Create
+          </button>
         </div>
       </div>
+      {showGeneratePinBox && (
+        <PinForm
+          showGeneratePinBox={showGeneratePinBox}
+          setShowGeneratePinBox={setShowGeneratePinBox}
+        />
+      )}
     </div>
   );
 };
