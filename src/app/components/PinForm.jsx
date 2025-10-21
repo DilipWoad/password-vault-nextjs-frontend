@@ -15,7 +15,7 @@ const PinForm = ({showGeneratePinBox,setShowGeneratePinBox}) => {
     setLoading(true);
     try {
       const res = await axios.patch(
-        `${BASE_URL}/vault/generate-pin`,
+        `${BASE_URL}/vault/pin`,
         { pin },
         {
           withCredentials: true,

@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
+
 import CommonFormInputs from "./CommonFormInputs.jsx";
+import axios from "axios";
+import { BASE_URL } from "../constant.js";
+import LoadingScreen from "./LoadingScreen.jsx";
+
 const AddToVault = ({ setShowAddToVaultForm }) => {
   const [loading, setLoading] = useState(false);
 
@@ -16,36 +21,36 @@ const AddToVault = ({ setShowAddToVaultForm }) => {
   const [vaultForm, setVaultForm] = useState(vaultFormObj);
 
   console.log("Vault form : ", vaultForm);
-  const handleVaultFormChange = (e) => {
-    const { name, value } = e.target;
+//   const handleVaultFormChange = (e) => {
+//     const { name, value } = e.target;
 
-    setVaultForm((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-  //   const generatePin = async () => {
-  //     // let redirectPath = null;
-  //     console.log("Inside Generate Pin.");
-  //     setLoading(true);
-  //     try {
-  //       const res = await axios.patch(
-  //         `${BASE_URL}/vault/generate-pin`,
-  //         { pin },
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
-  //       console.log(res.data);
-  //       //   redirectPath = "/home";
-  //       setShowGeneratePinBox(false);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.log("Error while generating pin : ", error);
-  //       //   redirectPath = "/login";
-  //       setLoading(false);
-  //     }
-  //   };
+//     setVaultForm((prevState) => ({
+//       ...prevState,
+//       [name]: value,
+//     }));
+//   };
+    const createVault = async (e) => {
+      // let redirectPath = null;
+      e.preventDefault();
+      console.log("Inside Generate Vault.");
+      setLoading(true);
+      try {
+        const res = await axios.post(
+          `${BASE_URL}/vault`,
+          vaultForm ,
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(res.data);
+        setShowAddToVaultForm(false);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error while creating vault: ", error);
+        //   redirectPath = "/login";
+        setLoading(false);
+      }
+    };
 
   //   const handlePinSubmit = async (e) => {
   //     e.preventDefault();
@@ -74,7 +79,7 @@ const AddToVault = ({ setShowAddToVaultForm }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 ">
       <form
-        // onSubmit={handlePinSubmit}
+        onSubmit={createVault}
         className="bg-white w-4/12  flex flex-col gap-5 p-4 rounded-lg shadow-lg"
       >
         <p className="text-2xl p-2 font-semibold">Add to Vault</p>
@@ -149,7 +154,7 @@ const AddToVault = ({ setShowAddToVaultForm }) => {
             type="submit"
             className="hover:cursor-pointer hover:bg-blue-600 bg-blue-500 hover:text-gray-300 rounded-md px-3 py-2 text-sm font-semibold"
           >
-            Create Pin
+            Add to Vault
           </button>
         </div>
       </form>

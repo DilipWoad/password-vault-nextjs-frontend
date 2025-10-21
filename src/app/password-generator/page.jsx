@@ -11,9 +11,11 @@ import { copyToClipBoard } from "../utils/copyToClipboard.js";
 import PinForm from "../components/PinForm.jsx";
 import axios from "axios";
 import AddToVault from "../components/AddToVault.jsx";
+import { redirect } from "next/navigation.js";
 
 const passwordGenerator = () => {
-  const [showAddToVaultForm,setShowAddToVaultForm] = useState(false)
+  const [showArrow,setShowArrow] = useState(false);
+  const [showAddToVaultForm,setShowAddToVaultForm] = useState(false);
   const [disablePinButton, setDisablePinButton] = useState(true);
   const [showGeneratePinBox, setShowGeneratePinBox] = useState(false);
   const [animation, setAnimation] = useState(false);
@@ -69,9 +71,6 @@ const passwordGenerator = () => {
     //this will get which to choose letter/number/symbols
     //once choosed
   };
-  // console.log("Generated Password :", generatedPassword);
-  // console.log("Checked :", checked);
-  // console.log("SelectedCharacters :", selectedCharacters);
 
   const handleCheckBoxChnage = (e) => {
     // setUseEffectStartCounter(2)
@@ -128,7 +127,7 @@ const passwordGenerator = () => {
 
   const userPinExists = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/vault/pin-exists`, {
+      const res = await axios.get(`${BASE_URL}/vault/pin`, {
         withCredentials: true,
       });
 
@@ -138,6 +137,7 @@ const passwordGenerator = () => {
       return true;
     }
   };
+
   const handleCreateClick = async () => {
     //first check if pin is create
     const res = await userPinExists();
@@ -155,9 +155,16 @@ const passwordGenerator = () => {
     // i can do if call a addValutForm component here too
     setShowAddToVaultForm(true);
   };
+
   const handleGeneratePinClick = async () => {
     setShowGeneratePinBox(true);
   };
+
+  const handleGoToVaultClick = ()=>{
+    //just move it to my-vault page\
+    redirect("/my-vault");
+  }
+
 
   useEffect(() => {
     console.log("ehhhhhhhhhhhhhhhhhhhhhh");
@@ -266,12 +273,21 @@ const passwordGenerator = () => {
             </div>
           </div>
         </div>
-        <div className="py-8 flex justify-center text-white">
+        <div className="py-8 flex gap-4 justify-center text-white">
           <button
             onClick={handleCreateClick}
             className="bg-green-500 px-3 py-2 rounded-lg hover:cursor-pointer hover:bg-green-600 hover:text-gray-300"
           >
             Create
+          </button>
+          <button
+          onMouseEnter={()=>setShowArrow(true)}
+          onMouseLeave={()=>setShowArrow(false)}
+            onClick={handleGoToVaultClick}
+            className="transition-all duration-500 bg-yellow-500 px-3 py-2 rounded-lg hover:cursor-pointer hover:bg-yellow-600 hover:text-gray-300"
+          >
+            {`Go to Vault`}
+            {showArrow && <span>{`->`}</span>}
           </button>
         </div>
       </div>
