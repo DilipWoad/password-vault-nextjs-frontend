@@ -10,8 +10,10 @@ import {
 import { copyToClipBoard } from "../utils/copyToClipboard.js";
 import PinForm from "../components/PinForm.jsx";
 import axios from "axios";
+import AddToVault from "../components/AddToVault.jsx";
 
 const passwordGenerator = () => {
+  const [showAddToVaultForm,setShowAddToVaultForm] = useState(false)
   const [disablePinButton, setDisablePinButton] = useState(true);
   const [showGeneratePinBox, setShowGeneratePinBox] = useState(false);
   const [animation, setAnimation] = useState(false);
@@ -147,6 +149,11 @@ const passwordGenerator = () => {
       setDisablePinButton(false);
       //then call for creating pin
     }
+    //if true it comes here
+    console.log("If true come here!!")
+    //we will send it to my-vault page /OR/ 
+    // i can do if call a addValutForm component here too
+    setShowAddToVaultForm(true);
   };
   const handleGeneratePinClick = async () => {
     setShowGeneratePinBox(true);
@@ -274,6 +281,9 @@ const passwordGenerator = () => {
           setShowGeneratePinBox={setShowGeneratePinBox}
         />
       )}
+      {
+        showAddToVaultForm && <AddToVault setShowAddToVaultForm={setShowAddToVaultForm}/>
+      }
     </div>
   );
 };
