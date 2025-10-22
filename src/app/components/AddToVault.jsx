@@ -7,7 +7,7 @@ import axios from "axios";
 import { BASE_URL } from "../constant.js";
 import LoadingScreen from "./LoadingScreen.jsx";
 
-const AddToVault = ({ setShowAddToVaultForm }) => {
+const AddToVault = ({ setShowAddToVaultForm,setVaults,vaults }) => {
   const [loading, setLoading] = useState(false);
 
   const vaultFormObj = {
@@ -43,6 +43,7 @@ const AddToVault = ({ setShowAddToVaultForm }) => {
           }
         );
         console.log(res.data);
+        setVaults([...vaults,res.data.data])
         setShowAddToVaultForm(false);
         setLoading(false);
       } catch (error) {

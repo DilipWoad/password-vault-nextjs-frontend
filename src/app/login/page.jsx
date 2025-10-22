@@ -51,7 +51,6 @@ export default function login() {
 
   return (
     <div className="flex justify-center h-screen items-center bg-yellow-500">
-      <EachRow />
       <form
         onSubmit={handleSubmit}
         className="bg-white min-w-80 flex  flex-col gap-10 p-4 rounded-lg shadow-lg"
