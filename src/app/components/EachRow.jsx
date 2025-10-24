@@ -1,12 +1,43 @@
 "use client";
 
+import axios from "axios";
 import { useState } from "react";
 
-const EachRow = ({ vault, vaultArrayLen, vaultIndex }) => {
-  const { title, username, password, note, url } = vault;
+const EachRow = ({
+  vault,
+  vaultArrayLen,
+  vaultIndex,
+  selectedRow,
+  setSelectedRow,
+}) => {
+  const { title, username, password, note, url, _id } = vault;
   const [eyeOpen, setEyeOpen] = useState(false);
+  const [checkboxStatus, setCheckboxStatus] = useState(false);
+
+  const handleCheckBoxClick = () => {
+    if (!checkboxStatus) {
+      //we can add it to the array
+      setSelectedRow([...selectedRow, _id]);
+    } else {
+      //remove from the array
+      console.log(_id);
+      const newArray = selectedRow.filter((vaultId) => vaultId !== _id);
+      console.log("New Array : ", newArray);
+      setSelectedRow(newArray);
+    }
+    //change the status of checkbox
+    setCheckboxStatus(!checkboxStatus);
+  };
+  
   return (
-    //  <input type="checkbox"></input>
+    <div className="flex relative ">
+      <input
+        type="checkbox"
+        defaultValue={_id}
+        defaultChecked={checkboxStatus}
+        onChange={handleCheckBoxClick}
+        className={`${selectedRow.length>1 ? "accent-red-500":""} absolute -left-7 bg-red-500 h-full hover:cursor-pointer `}
+      ></input>
       <div className=" flex justify-between truncate text-sm ">
         <span
           className={`${
@@ -20,7 +51,7 @@ const EachRow = ({ vault, vaultArrayLen, vaultIndex }) => {
         </span>
         <span className="flex flex-1 max-w-[133px] bg-violet-500 items-center justify-between border-l-1 border-y-1 ">
           <span className="truncate  px-1 py-1 transition-all  items-center  ">
-            {eyeOpen ? password : "*****************"}
+            {eyeOpen ? password : "******************"}
           </span>
           <button
             onClick={() => setEyeOpen(!eyeOpen)}
@@ -40,6 +71,7 @@ const EachRow = ({ vault, vaultArrayLen, vaultIndex }) => {
           {note}
         </span>
       </div>
+    </div>
   );
 };
 
