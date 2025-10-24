@@ -9,6 +9,7 @@ const EachRow = ({
   vaultIndex,
   selectedRow,
   setSelectedRow,
+  setEditVault,
 }) => {
   const { title, username, password, note, url, _id } = vault;
   const [eyeOpen, setEyeOpen] = useState(false);
@@ -17,7 +18,9 @@ const EachRow = ({
   const handleCheckBoxClick = () => {
     if (!checkboxStatus) {
       //we can add it to the array
+      setEditVault(vault)
       setSelectedRow([...selectedRow, _id]);
+      
     } else {
       //remove from the array
       console.log(_id);

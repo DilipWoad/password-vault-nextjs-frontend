@@ -10,7 +10,10 @@ const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
   const [showAddToVaultForm, setShowAddToVaultForm] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]);
-  const [loading,setLoading]=useState(false)
+  const [editVault, setEditVault] = useState(null);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const getVault = async () => {
     try {
       console.log("inside");
@@ -53,22 +56,25 @@ const userPasswordVault = () => {
   };
 
   // console.log("Vault after deletion : ", arrayAfterDeletion);
-
-  const handleEditClick = async (id) => {
-    setLoading(true);
-    try {
-      const res = await axios.patch(`${BASE_URL}/vault/${id}`, {
-        withCredentials: true,
-      });
-      setVaults(res.data.data);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-      setVideoEditOption(true);
-      setSelectedRow([]);
-    }
+  const handleEditClick = () => {
+    setShowEditForm(true);
   };
-  // console.log("Selected Rows array : ", selectedRow);
+  // const handleSaveEditClick = async (id) => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await axios.patch(`${BASE_URL}/vault/${id}`, {
+  //       withCredentials: true,
+  //     });
+  //     setVaults(res.data.data);
+  //   } catch (error) {
+  //   } finally {
+  //     setLoading(false);
+  //     setVideoEditOption(true);
+  //     setSelectedRow([]);
+  //   }
+  // };
+
+  console.log("Selected edit Row : ", editVault);
   useEffect(() => {
     getVault();
   }, []);
@@ -81,7 +87,7 @@ const userPasswordVault = () => {
         <div className=" flex justify-between mb-4 mt-5  text-sm  font-mono font-semibold">
           <button
             disabled={selectedRow.length < 1}
-            onClick={()=>handleDelete(selectedRow)}
+            onClick={() => handleDelete(selectedRow)}
             className={`${
               selectedRow.length >= 1
                 ? "hover:bg-red-500      bg-red-600 hover:cursor-pointer hover:text-gray-200 "
@@ -92,6 +98,7 @@ const userPasswordVault = () => {
           </button>
           <div className="flex text-sm font-semibold font-mono gap-4">
             <button
+              onClick={handleEditClick}
               disabled={selectedRow.length < 1 || selectedRow.length > 1}
               className={`${
                 selectedRow.length === 1
@@ -131,12 +138,13 @@ const userPasswordVault = () => {
         {vaults &&
           vaults.map((vault, index) => (
             <EachRow
-              key={vault.password}
+              key={vault._id}
               vaultIndex={index}
               vaultArrayLen={vaults.length}
               vault={vault}
               selectedRow={selectedRow}
               setSelectedRow={setSelectedRow}
+              setEditVault={setEditVault}
             />
           ))}
       </div>
@@ -145,10 +153,20 @@ const userPasswordVault = () => {
         <AddToVault
           setShowAddToVaultForm={setShowAddToVaultForm}
           setVaults={setVaults}
+          isEdit={false}
           vaults={vaults}
         />
       )}
-      {loading && <LoadingScreen/>}
+      {loading && <LoadingScreen />}
+      {showEditForm && (
+        <AddToVault
+          setShowAddToVaultForm={setShowEditForm}
+          setVaults={setVaults}
+          vaults={vaults}
+          editVault={editVault}
+          isEdit={true}
+        />
+      )}
     </div>
   );
 };

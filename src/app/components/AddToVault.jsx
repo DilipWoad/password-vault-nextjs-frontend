@@ -7,51 +7,83 @@ import axios from "axios";
 import { BASE_URL } from "../constant.js";
 import LoadingScreen from "./LoadingScreen.jsx";
 
-const AddToVault = ({ setShowAddToVaultForm,setVaults,vaults }) => {
+const AddToVault = ({
+  setShowAddToVaultForm,
+  setVaults,
+  vaults,
+  editVault,
+  isEdit,
+  setGeneratedPassword,
+  fromGenerator,
+}) => {
   const [loading, setLoading] = useState(false);
 
   const vaultFormObj = {
-    title: "",
-    username: "",
-    password: "",
-    url: "",
-    note: "",
+    title: `${isEdit ? editVault.title : ""}`,
+    username: `${isEdit ? editVault.username : ""}`,
+    password: `${isEdit ? editVault.password : ""}`,
+    url: `${isEdit ? editVault.url : ""}`,
+    note: `${isEdit ? editVault.note : ""}`,
   };
 
   const [vaultForm, setVaultForm] = useState(vaultFormObj);
 
   console.log("Vault form : ", vaultForm);
-//   const handleVaultFormChange = (e) => {
-//     const { name, value } = e.target;
+  //   const handleVaultFormChange = (e) => {
+  //     const { name, value } = e.target;
 
-//     setVaultForm((prevState) => ({
-//       ...prevState,
-//       [name]: value,
-//     }));
-//   };
-    const createVault = async (e) => {
-      // let redirectPath = null;
-      e.preventDefault();
-      console.log("Inside Generate Vault.");
-      setLoading(true);
-      try {
-        const res = await axios.post(
-          `${BASE_URL}/vault`,
-          vaultForm ,
+  //     setVaultForm((prevState) => ({
+  //       ...prevState,
+  //       [name]: value,
+  //     }));
+  //   };
+  const createVault = async (e) => {
+    // let redirectPath = null;
+    e.preventDefault();
+    console.log("Inside Generate Vault.");
+    setLoading(true);
+    try {
+      if (!isEdit) {
+        const res = await axios.post(`${BASE_URL}/vault`, vaultForm, {
+          withCredentials: true,
+        });
+        console.log(res.data);
+        console.log( "Does this add to the vault ? ",vaults);
+        fromGenerator && setGeneratedPassword("")
+        !fromGenerator && setVaults([...vaults, res.data]);
+        setShowAddToVaultForm(false);
+      } else {
+        const res = await axios.patch(
+          `${BASE_URL}/vault/${editVault._id}`,
+          vaultForm,
           {
             withCredentials: true,
           }
         );
         console.log(res.data);
-        setVaults([...vaults,res.data.data])
+        //so we have vaults aready ->
+        //i need to find that obj in vaults -> with prev in setVults
+        //after finding i can change the data with new
+        let oldVault = vaults.find((element) => element._id === editVault._id);
+        oldVault.username = vaultForm.username;
+        oldVault.password = res.data.data.password;
+        oldVault.title = vaultForm.title;
+        oldVault.url = vaultForm.url;
+        oldVault.note = vaultForm.note;
+
+        console.log( "Does this updated the vault ? ",vaults);
+        setVaults(vaults);
         setShowAddToVaultForm(false);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error while creating vault: ", error);
-        //   redirectPath = "/login";
-        setLoading(false);
       }
-    };
+      setLoading(false);
+    } catch (error) {
+      console.error("Error while creating vault: ", error);
+      //   redirectPath = "/login";
+      setLoading(false);
+    }finally{
+      setShowAddToVaultForm(false);
+    }
+  };
 
   //   const handlePinSubmit = async (e) => {
   //     e.preventDefault();
