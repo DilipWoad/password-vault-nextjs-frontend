@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
+import { CLOSE_EYE, OPEN_EYE } from "../constant.js";
 
 const EachRow = ({
   vault,
@@ -10,6 +11,8 @@ const EachRow = ({
   selectedRow,
   setSelectedRow,
   setEditVault,
+  setShowPin,
+  showPin
 }) => {
   const { title, username, password, note, url, _id } = vault;
   const [eyeOpen, setEyeOpen] = useState(false);
@@ -18,9 +21,8 @@ const EachRow = ({
   const handleCheckBoxClick = () => {
     if (!checkboxStatus) {
       //we can add it to the array
-      setEditVault(vault)
+      setEditVault(vault);
       setSelectedRow([...selectedRow, _id]);
-      
     } else {
       //remove from the array
       console.log(_id);
@@ -31,7 +33,13 @@ const EachRow = ({
     //change the status of checkbox
     setCheckboxStatus(!checkboxStatus);
   };
-  
+
+  const handleShowPasswordClick = () => {
+    // so a pop-up screen asking for pin
+    setShowPin(true);
+    setEyeOpen(!eyeOpen);
+  };
+
   return (
     <div className="flex relative ">
       <input
@@ -39,7 +47,9 @@ const EachRow = ({
         defaultValue={_id}
         defaultChecked={checkboxStatus}
         onChange={handleCheckBoxClick}
-        className={`${selectedRow.length>1 ? "accent-red-500":""} absolute -left-7 bg-red-500 h-full hover:cursor-pointer `}
+        className={`${
+          selectedRow.length > 1 ? "accent-red-500" : ""
+        } absolute -left-7 bg-red-500 h-full hover:cursor-pointer `}
       ></input>
       <div className=" flex justify-between truncate text-sm ">
         <span
@@ -56,12 +66,16 @@ const EachRow = ({
           <span className="truncate  px-1 py-1 transition-all  items-center  ">
             {eyeOpen ? password : "******************"}
           </span>
-          <button
-            onClick={() => setEyeOpen(!eyeOpen)}
+          <div
+            onClick={handleShowPasswordClick}
             className="hover:cursor-pointer h-fit"
           >
-            eye
-          </button>
+            <img
+              className="w-5 "
+              src={eyeOpen ? OPEN_EYE : CLOSE_EYE}
+              alt="see-password-icon"
+            />
+          </div>
         </span>
         <span className="truncate bg-sky-500 px-2 flex flex-1  py-1 w-[133px]  border-y-1 items-center  border-l-1">
           {url}

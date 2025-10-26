@@ -5,6 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "../constant";
 import EachRow from "../components/EachRow.jsx";
 import AddToVault from "../components/AddToVault.jsx";
+import UserPin from "../components/UserPin.jsx";
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -13,6 +14,7 @@ const userPasswordVault = () => {
   const [editVault, setEditVault] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPin,setShowPin] = useState(false);
 
   const getVault = async () => {
     try {
@@ -145,6 +147,7 @@ const userPasswordVault = () => {
               selectedRow={selectedRow}
               setSelectedRow={setSelectedRow}
               setEditVault={setEditVault}
+              setShowPin={setShowPin}
             />
           ))}
       </div>
@@ -167,6 +170,8 @@ const userPasswordVault = () => {
           isEdit={true}
         />
       )}
+
+      {showPin && <UserPin setShowPin={setShowPin} />}
     </div>
   );
 };
