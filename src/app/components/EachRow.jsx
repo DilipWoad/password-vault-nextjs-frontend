@@ -63,7 +63,7 @@ const EachRow = ({
           {username}
         </span>
         <span className="flex flex-1 max-w-[133px] bg-violet-500 items-center justify-between border-l-1 border-y-1 ">
-          <span className="truncate  px-1 py-1 transition-all  items-center  ">
+          <span className="truncate  px-1 py-1 transition-all  items-center bg-red-500 w-[132px]  ">
             {eyeOpen ? password : "******************"}
           </span>
           <div
