@@ -14,8 +14,9 @@ import AddToVault from "../components/AddToVault.jsx";
 import { redirect } from "next/navigation.js";
 
 const passwordGenerator = () => {
-  const [showArrow, setShowArrow] = useState(false);
-  const [showAddToVaultForm, setShowAddToVaultForm] = useState(false);
+  const [vaults,setVaults]=useState([])
+  const [showArrow,setShowArrow] = useState(false);
+  const [showAddToVaultForm,setShowAddToVaultForm] = useState(false);
   const [disablePinButton, setDisablePinButton] = useState(true);
   const [showGeneratePinBox, setShowGeneratePinBox] = useState(false);
   const [animation, setAnimation] = useState(false);
@@ -150,8 +151,8 @@ const passwordGenerator = () => {
       //then call for creating pin
     }
     //if true it comes here
-    console.log("If true come here!!");
-    //we will send it to my-vault page /OR/
+    console.log("If true come here!!")
+    //we will send it to my-vault page /OR/ 
     // i can do if call a addValutForm component here too
     setShowAddToVaultForm(true);
   };
@@ -160,10 +161,11 @@ const passwordGenerator = () => {
     setShowGeneratePinBox(true);
   };
 
-  const handleGoToVaultClick = () => {
+  const handleGoToVaultClick = ()=>{
     //just move it to my-vault page\
     redirect("/my-vault");
-  };
+  }
+
 
   useEffect(() => {
     console.log("ehhhhhhhhhhhhhhhhhhhhhh");
@@ -280,8 +282,8 @@ const passwordGenerator = () => {
             Create
           </button>
           <button
-            onMouseEnter={() => setShowArrow(true)}
-            onMouseLeave={() => setShowArrow(false)}
+          onMouseEnter={()=>setShowArrow(true)}
+          onMouseLeave={()=>setShowArrow(false)}
             onClick={handleGoToVaultClick}
             className="transition-all duration-500 bg-yellow-500 px-3 py-2 rounded-lg hover:cursor-pointer hover:bg-yellow-600 hover:text-gray-300"
           >
@@ -296,13 +298,9 @@ const passwordGenerator = () => {
           setShowGeneratePinBox={setShowGeneratePinBox}
         />
       )}
-      {showAddToVaultForm && (
-        <AddToVault
-          setShowAddToVaultForm={setShowAddToVaultForm}
-          setGeneratedPassword={setGeneratedPassword}
-          fromGenerator={true}
-        />
-      )}
+      {
+        showAddToVaultForm && <AddToVault setShowAddToVaultForm={setShowAddToVaultForm} setGeneratedPassword={setGeneratedPassword}/>
+      }
     </div>
   );
 };

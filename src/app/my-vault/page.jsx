@@ -14,7 +14,9 @@ const userPasswordVault = () => {
   const [editVault, setEditVault] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showPin,setShowPin] = useState(false);
+  const [showPin, setShowPin] = useState(false);
+  const [eyeOpen, setEyeOpen] = useState(false);
+  const [disablePinButton, setDisablePinButton] = useState(true);
 
   const getVault = async () => {
     try {
@@ -148,6 +150,8 @@ const userPasswordVault = () => {
               setSelectedRow={setSelectedRow}
               setEditVault={setEditVault}
               setShowPin={setShowPin}
+              setEyeOpen={setEyeOpen}
+              eyeOpen={eyeOpen}
             />
           ))}
       </div>
@@ -171,7 +175,25 @@ const userPasswordVault = () => {
         />
       )}
 
-      {showPin && <UserPin setShowPin={setShowPin} />}
+      {showPin && (
+        <UserPin
+          setShowPin={setShowPin}
+          setEyeOpen={setEyeOpen}
+          setDisablePinButton={setDisablePinButton}
+        />
+      )}
+
+      <button
+        disabled={disablePinButton}
+        // onClick={handleGeneratePinClick}
+        className={`${
+          disablePinButton
+            ? "hover:cursor-not-allowed hover:bg-blue-400 hover:text-gray-600 bg-blue-300 text-gray-500"
+            : "bg-blue-500 hover:cursor-pointer hover:bg-blue-600 text-white"
+        }  px-3 py-2 rounded-md  font-semibold text-sm`}
+      >
+        Generate Pin
+      </button>
     </div>
   );
 };

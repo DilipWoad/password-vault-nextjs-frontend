@@ -12,10 +12,11 @@ const EachRow = ({
   setSelectedRow,
   setEditVault,
   setShowPin,
-  showPin
+  showPin,
+  eyeOpen,
+  setEyeOpen
 }) => {
   const { title, username, password, note, url, _id } = vault;
-  const [eyeOpen, setEyeOpen] = useState(false);
   const [checkboxStatus, setCheckboxStatus] = useState(false);
 
   const handleCheckBoxClick = () => {
