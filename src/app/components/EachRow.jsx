@@ -13,11 +13,12 @@ const EachRow = ({
   setEditVault,
   setShowPin,
   showPin,
-  eyeOpen,
-  setEyeOpen
+  eyeOpenAfterPin,
+  setEyeOpenAfterPin,
 }) => {
   const { title, username, password, note, url, _id } = vault;
   const [checkboxStatus, setCheckboxStatus] = useState(false);
+  const [eyeOpen, setEyeOpen] = useState(false);
 
   const handleCheckBoxClick = () => {
     if (!checkboxStatus) {
@@ -37,10 +38,17 @@ const EachRow = ({
 
   const handleShowPasswordClick = () => {
     // so a pop-up screen asking for pin
+    if (eyeOpen) {
+      //then we don't need to ask for pin
+      //
+      setEyeOpen(false);
+      setEyeOpenAfterPin(false);
+      return;
+    }
+    setEyeOpen(true);
     setShowPin(true);
-    setEyeOpen(!eyeOpen);
   };
-
+  console.log(`After pin click : ${eyeOpenAfterPin} :: eyeOpen : ${eyeOpen}`)
   return (
     <div className="flex relative ">
       <input
@@ -65,7 +73,7 @@ const EachRow = ({
         </span>
         <span className="flex flex-1 max-w-[133px] bg-violet-500 items-center justify-between border-l-1 border-y-1 ">
           <span className="truncate  px-1 py-1 transition-all  items-center bg-red-500 w-[132px]  ">
-            {eyeOpen ? password : "******************"}
+            {(eyeOpen && eyeOpenAfterPin) ? password : "******************"}
           </span>
           <div
             onClick={handleShowPasswordClick}

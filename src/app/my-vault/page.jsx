@@ -15,7 +15,7 @@ const userPasswordVault = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPin, setShowPin] = useState(false);
-  const [eyeOpen, setEyeOpen] = useState(false);
+  const [eyeOpenAfterPin, setEyeOpenAfterPin] = useState(false);
   const [disablePinButton, setDisablePinButton] = useState(true);
 
   const getVault = async () => {
@@ -150,8 +150,8 @@ const userPasswordVault = () => {
               setSelectedRow={setSelectedRow}
               setEditVault={setEditVault}
               setShowPin={setShowPin}
-              setEyeOpen={setEyeOpen}
-              eyeOpen={eyeOpen}
+              setEyeOpenAfterPin={setEyeOpenAfterPin}
+              eyeOpenAfterPin={eyeOpenAfterPin}
             />
           ))}
       </div>
@@ -178,8 +178,8 @@ const userPasswordVault = () => {
       {showPin && (
         <UserPin
           setShowPin={setShowPin}
-          setEyeOpen={setEyeOpen}
           setDisablePinButton={setDisablePinButton}
+          setEyeOpenAfterPin={setEyeOpenAfterPin}
         />
       )}
 
