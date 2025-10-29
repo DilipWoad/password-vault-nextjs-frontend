@@ -6,6 +6,7 @@ import { BASE_URL } from "../constant";
 import EachRow from "../components/EachRow.jsx";
 import AddToVault from "../components/AddToVault.jsx";
 import UserPin from "../components/UserPin.jsx";
+import { copyToClipBoard } from "../utils/copyToClipboard.js";
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -17,6 +18,8 @@ const userPasswordVault = () => {
   const [showPin, setShowPin] = useState(false);
   const [eyeOpenAfterPin, setEyeOpenAfterPin] = useState(false);
   const [disablePinButton, setDisablePinButton] = useState(true);
+  const [showCopiedStatus, setShowCopiedStatus] = useState(false);
+  const [animation, setAnimation] = useState(false);
 
   const getVault = async () => {
     try {
@@ -79,14 +82,40 @@ const userPasswordVault = () => {
   // };
 
   console.log("Selected edit Row : ", editVault);
+
+  const handleCopyClick = async () => {
+    //get the display-password div element
+    const passwordDisplay = document.getElementById("passwordBox");
+    // console.log("Password Display : ",passwordDisplay.innerHTML)
+    const text = passwordDisplay?.innerHTML;
+    if (eyeOpenAfterPin) {
+      copyToClipBoard(text);
+      setShowCopiedStatus(true);
+    }
+  };
   useEffect(() => {
-    getVault();
-  }, []);
+    vaults && getVault();
+    if (showCopiedStatus) {
+      // setShowCopiedStatus(false);
+      setAnimation(false);
+
+      const hideTimer = setTimeout(() => {
+        console.log("Animation ?");
+        setAnimation(true); // Start slide-out animation
+        setTimeout(() => {
+          console.log("Animation ?");
+          setShowCopiedStatus(false);
+        }, 2000); // Allow animation to complete
+      }, 2000); // Toast visible duration
+
+      return () => clearTimeout(hideTimer);
+    }
+  }, [showCopiedStatus]);
   if (!vaults) {
     <LoadingScreen />;
   }
   return (
-    <div className="bg-red-500 flex items-center justify-center h-screen">
+    <div className="bg-red-500 flex items-center justify-center h-screen relative">
       <div className="bg-green-500 w-auto pt-2 pb-10 px-10 rounded-lg ">
         <div className=" flex justify-between mb-4 mt-5  text-sm  font-mono font-semibold">
           <button
@@ -152,6 +181,8 @@ const userPasswordVault = () => {
               setShowPin={setShowPin}
               setEyeOpenAfterPin={setEyeOpenAfterPin}
               eyeOpenAfterPin={eyeOpenAfterPin}
+              id={"passwordBox"}
+              handleCopyClick={handleCopyClick}
             />
           ))}
       </div>
@@ -183,7 +214,7 @@ const userPasswordVault = () => {
         />
       )}
 
-      <button
+      {/* <button
         disabled={disablePinButton}
         // onClick={handleGeneratePinClick}
         className={`${
@@ -193,7 +224,16 @@ const userPasswordVault = () => {
         }  px-3 py-2 rounded-md  font-semibold text-sm`}
       >
         Generate Pin
-      </button>
+      </button> */}
+      {showCopiedStatus && (
+        <p
+          className={`bg-yellow-500 px-2 py-1 text-sm w-fit absolute top-50 transition-all duration-1000 ${
+            animation ? "sm:translate-y-5 opacity-0  " : ""
+          } rounded-md`}
+        >
+          Copied!
+        </p>
+      )}
     </div>
   );
 };

@@ -91,6 +91,11 @@ const UserPin = ({
     }
   };
 
+  const handlePinCancelClick=() => {
+    setEyeOpenAfterPin(false)
+    setShowPin(false)
+  }
+
   console.log("Each pin : ", eachPin);
   console.log("Pin :", pin);
   return (
@@ -108,31 +113,10 @@ const UserPin = ({
               maxLength={1}
             />
           ))}
-          {/* <input
-            onChange={handleInputChange}
-            name="input2"
-            defaultValue={eachPin.input2}
-            className="bg-gray-100 w-10 h-12 rounded-md text-center text-2xl"
-            maxLength={1}
-          />
-          <input
-            onChange={handleInputChange}
-            name="input3"
-            defaultValue={eachPin.input3}
-            className="bg-gray-100 w-10 h-12 rounded-md text-center text-2xl"
-            maxLength={1}
-          />
-          <input
-            onChange={handleInputChange}
-            name="input4"
-            defaultValue={eachPin.input4}
-            className="bg-gray-100 w-10 h-12 rounded-md text-center text-2xl"
-            maxLength={1}
-          /> */}
         </div>
         <div className=" flex gap-3 justify-center">
           <button
-            onClick={() => setShowPin(false)}
+            onClick={handlePinCancelClick}
             className="px-7 py-2 text-sm hover:bg-gray-300 hover:text-gray-500  bg-gray-200 font-semibold rounded-md"
           >
             Cancel

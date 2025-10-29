@@ -15,6 +15,8 @@ const EachRow = ({
   showPin,
   eyeOpenAfterPin,
   setEyeOpenAfterPin,
+  handleCopyClick,
+  id,
 }) => {
   const { title, username, password, note, url, _id } = vault;
   const [checkboxStatus, setCheckboxStatus] = useState(false);
@@ -43,12 +45,15 @@ const EachRow = ({
       //
       setEyeOpen(false);
       setEyeOpenAfterPin(false);
-      return;
+    } else {
+      setEyeOpen(true);
+      setShowPin(true);
     }
-    setEyeOpen(true);
-    setShowPin(true);
   };
-  console.log(`After pin click : ${eyeOpenAfterPin} :: eyeOpen : ${eyeOpen}`)
+  // if (eyeOpenAfterPin && !showPin) {
+  //   setEyeOpen(true);
+  // }
+  console.log(`After pin click : ${eyeOpenAfterPin} :: eyeOpen : ${eyeOpen}`);
   return (
     <div className="flex relative ">
       <input
@@ -72,8 +77,12 @@ const EachRow = ({
           {username}
         </span>
         <span className="flex flex-1 max-w-[133px] bg-violet-500 items-center justify-between border-l-1 border-y-1 ">
-          <span className="truncate  px-1 py-1 transition-all  items-center bg-red-500 w-[132px]  ">
-            {(eyeOpen && eyeOpenAfterPin) ? password : "******************"}
+          <span
+            onClick={() => handleCopyClick()}
+            id={`${eyeOpen ? id : ""}`}
+            className="truncate  px-1 py-1 transition-all  items-center bg-red-500 w-[132px]  "
+          >
+            {eyeOpen && eyeOpenAfterPin ? password : "******************"}
           </span>
           <div
             onClick={handleShowPasswordClick}
@@ -81,7 +90,7 @@ const EachRow = ({
           >
             <img
               className="w-5 "
-              src={eyeOpen ? OPEN_EYE : CLOSE_EYE}
+              src={eyeOpen && eyeOpenAfterPin ? OPEN_EYE : CLOSE_EYE}
               alt="see-password-icon"
             />
           </div>
