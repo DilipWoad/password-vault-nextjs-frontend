@@ -5,8 +5,8 @@ import axios from "axios";
 import { BASE_URL } from "../constant";
 import EachRow from "../components/EachRow.jsx";
 import AddToVault from "../components/AddToVault.jsx";
-import UserPin from "../components/UserPin.jsx";
 import { copyToClipBoard } from "../utils/copyToClipboard.js";
+import ShowPasswordContextProvider from "../context/ShowPasswordContextProvider.jsx";
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -15,9 +15,6 @@ const userPasswordVault = () => {
   const [editVault, setEditVault] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showPin, setShowPin] = useState(false);
-  const [eyeOpenAfterPin, setEyeOpenAfterPin] = useState(false);
-  const [disablePinButton, setDisablePinButton] = useState(true);
   const [showCopiedStatus, setShowCopiedStatus] = useState(false);
   const [animation, setAnimation] = useState(false);
 
@@ -88,7 +85,8 @@ const userPasswordVault = () => {
     const passwordDisplay = document.getElementById("passwordBox");
     // console.log("Password Display : ",passwordDisplay.innerHTML)
     const text = passwordDisplay?.innerHTML;
-    if (eyeOpenAfterPin) {
+    console.log("Texxxxxxxxxxxxxxxxxt : ",text)
+    if(text !== undefined){
       copyToClipBoard(text);
       setShowCopiedStatus(true);
     }
@@ -106,6 +104,11 @@ const userPasswordVault = () => {
           console.log("Animation ?");
           setShowCopiedStatus(false);
         }, 2000); // Allow animation to complete
+        setTimeout(()=>{
+          console.log("Is this iw running after 10sec??")
+          setShowCopiedStatus(false);
+          copyToClipBoard();      
+        },10000)
       }, 2000); // Toast visible duration
 
       return () => clearTimeout(hideTimer);
@@ -115,106 +118,98 @@ const userPasswordVault = () => {
     <LoadingScreen />;
   }
   return (
-    <div className="bg-red-500 flex items-center justify-center h-screen relative">
-      <div className="bg-green-500 w-auto pt-2 pb-10 px-10 rounded-lg ">
-        <div className=" flex justify-between mb-4 mt-5  text-sm  font-mono font-semibold">
-          <button
-            disabled={selectedRow.length < 1}
-            onClick={() => handleDelete(selectedRow)}
-            className={`${
-              selectedRow.length >= 1
-                ? "hover:bg-red-500      bg-red-600 hover:cursor-pointer hover:text-gray-200 "
-                : "hover:cursor-not-allowed bg-red-400 text-slate-300 "
-            }transition-all duration-300 px-3 py-2 rounded-md`}
-          >
-            Delete
-          </button>
-          <div className="flex text-sm font-semibold font-mono gap-4">
+    <ShowPasswordContextProvider>
+      <div className="bg-red-500 flex items-center justify-center h-screen relative">
+        <div className="bg-green-500 w-auto pt-2 pb-10 px-10 rounded-lg ">
+          <div className=" flex justify-between mb-4 mt-5  text-sm  font-mono font-semibold">
             <button
-              onClick={handleEditClick}
-              disabled={selectedRow.length < 1 || selectedRow.length > 1}
+              disabled={selectedRow.length < 1}
+              onClick={() => handleDelete(selectedRow)}
               className={`${
-                selectedRow.length === 1
-                  ? "hover:bg-pink-500  bg-pink-600 hover:cursor-pointer hover:text-gray-200 "
-                  : "bg-pink-400 hover:cursor-not-allowed text-slate-300"
-              } px-7 py-2 rounded-md transition-all duration-300 `}
+                selectedRow.length >= 1
+                  ? "hover:bg-red-500      bg-red-600 hover:cursor-pointer hover:text-gray-200 "
+                  : "hover:cursor-not-allowed bg-red-400 text-slate-300 "
+              }transition-all duration-300 px-3 py-2 rounded-md`}
             >
-              Edit
+              Delete
             </button>
-            <button
-              onClick={() => setShowAddToVaultForm(true)}
-              className="hover:bg-purple-500 px-7 py-2 rounded-md bg-purple-700 hover:cursor-pointer hover:text-gray-200 transition-all duration-300"
-            >
-              Add
-            </button>
+            <div className="flex text-sm font-semibold font-mono gap-4">
+              <button
+                onClick={handleEditClick}
+                disabled={selectedRow.length < 1 || selectedRow.length > 1}
+                className={`${
+                  selectedRow.length === 1
+                    ? "hover:bg-pink-500  bg-pink-600 hover:cursor-pointer hover:text-gray-200 "
+                    : "bg-pink-400 hover:cursor-not-allowed text-slate-300"
+                } px-7 py-2 rounded-md transition-all duration-300 `}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => setShowAddToVaultForm(true)}
+                className="hover:bg-purple-500 px-7 py-2 rounded-md bg-purple-700 hover:cursor-pointer hover:text-gray-200 transition-all duration-300"
+              >
+                Add
+              </button>
+            </div>
           </div>
+          {/* table header + rows */}
+          <div className="bg-blue-500 flex justify-between font-mono font-semibold text-xl  ">
+            {/* <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1 text-sm">Select</span> */}
+            <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
+              Title
+            </span>
+            <span className="bg-lime-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
+              Username
+            </span>
+            <span className="bg-violet-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
+              Password
+            </span>
+            <span className="bg-sky-500 px-2 flex flex-1  py-1 justify-center border-y-1 border-l-1">
+              URL
+            </span>
+            <span className="rounded-tr-lg bg-yellow-500 px-2 flex flex-1 py-1 justify-center border-y-1 border-x-1">
+              Note
+            </span>
+          </div>
+          {vaults &&
+            vaults.map((vault, index) => (
+              <EachRow
+                key={vault._id}
+                vaultIndex={index}
+                vaultArrayLen={vaults.length}
+                vault={vault}
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+                setEditVault={setEditVault}
+                id={"passwordBox"}
+                handleCopyClick={handleCopyClick}
+              />
+            ))}
         </div>
-        {/* table header + rows */}
-        <div className="bg-blue-500 flex justify-between font-mono font-semibold text-xl  ">
-          {/* <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1 text-sm">Select</span> */}
-          <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
-            Title
-          </span>
-          <span className="bg-lime-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
-            Username
-          </span>
-          <span className="bg-violet-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
-            Password
-          </span>
-          <span className="bg-sky-500 px-2 flex flex-1  py-1 justify-center border-y-1 border-l-1">
-            URL
-          </span>
-          <span className="rounded-tr-lg bg-yellow-500 px-2 flex flex-1 py-1 justify-center border-y-1 border-x-1">
-            Note
-          </span>
-        </div>
-        {vaults &&
-          vaults.map((vault, index) => (
-            <EachRow
-              key={vault._id}
-              vaultIndex={index}
-              vaultArrayLen={vaults.length}
-              vault={vault}
-              selectedRow={selectedRow}
-              setSelectedRow={setSelectedRow}
-              setEditVault={setEditVault}
-              setShowPin={setShowPin}
-              setEyeOpenAfterPin={setEyeOpenAfterPin}
-              eyeOpenAfterPin={eyeOpenAfterPin}
-              id={"passwordBox"}
-              handleCopyClick={handleCopyClick}
-            />
-          ))}
-      </div>
 
-      {showAddToVaultForm && (
-        <AddToVault
-          setShowAddToVaultForm={setShowAddToVaultForm}
-          setVaults={setVaults}
-          isEdit={false}
-          vaults={vaults}
-        />
-      )}
-      {loading && <LoadingScreen />}
-      {showEditForm && (
-        <AddToVault
-          setShowAddToVaultForm={setShowEditForm}
-          setVaults={setVaults}
-          vaults={vaults}
-          editVault={editVault}
-          isEdit={true}
-        />
-      )}
+        {showAddToVaultForm && (
+          <AddToVault
+            setShowAddToVaultForm={setShowAddToVaultForm}
+            setVaults={setVaults}
+            isEdit={false}
+            vaults={vaults}
+          />
+        )}
+        {loading && <LoadingScreen />}
+        {showEditForm && (
+          <AddToVault
+            setShowAddToVaultForm={setShowEditForm}
+            setVaults={setVaults}
+            vaults={vaults}
+            editVault={editVault}
+            isEdit={true}
+          />
+        )}
 
-      {showPin && (
-        <UserPin
-          setShowPin={setShowPin}
-          setDisablePinButton={setDisablePinButton}
-          setEyeOpenAfterPin={setEyeOpenAfterPin}
-        />
-      )}
+        
 
-      {/* <button
+        {/* <button
         disabled={disablePinButton}
         // onClick={handleGeneratePinClick}
         className={`${
@@ -225,16 +220,17 @@ const userPasswordVault = () => {
       >
         Generate Pin
       </button> */}
-      {showCopiedStatus && (
-        <p
-          className={`bg-yellow-500 px-2 py-1 text-sm w-fit absolute top-50 transition-all duration-1000 ${
-            animation ? "sm:translate-y-5 opacity-0  " : ""
-          } rounded-md`}
-        >
-          Copied!
-        </p>
-      )}
-    </div>
+        {showCopiedStatus && (
+          <p
+            className={`bg-yellow-500 px-2 py-1 text-sm w-fit absolute top-50 transition-all duration-1000 ${
+              animation ? "sm:translate-y-5 opacity-0  " : ""
+            } rounded-md`}
+          >
+            Copied!
+          </p>
+        )}
+      </div>
+    </ShowPasswordContextProvider>
   );
 };
 

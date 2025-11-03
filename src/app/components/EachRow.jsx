@@ -1,8 +1,11 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CLOSE_EYE, OPEN_EYE } from "../constant.js";
+import ShowPasswordContext from "../context/ShowPasswordContext.js";
+import LoadingScreen from "./LoadingScreen.jsx";
+import UserPin from "./UserPin.jsx";
 
 const EachRow = ({
   vault,
@@ -11,16 +14,17 @@ const EachRow = ({
   selectedRow,
   setSelectedRow,
   setEditVault,
-  setShowPin,
-  showPin,
-  eyeOpenAfterPin,
-  setEyeOpenAfterPin,
   handleCopyClick,
   id,
 }) => {
   const { title, username, password, note, url, _id } = vault;
   const [checkboxStatus, setCheckboxStatus] = useState(false);
   const [eyeOpen, setEyeOpen] = useState(false);
+  const [eyeOpenAfterPin, setEyeOpenAfterPin] = useState(false);
+  const [showPin, setShowPin] = useState(false);
+
+  // const { showPassword, setShowPassword } = useContext(ShowPasswordContext);
+  // console.log("Context Api Working : ", showPassword);
 
   const handleCheckBoxClick = () => {
     if (!checkboxStatus) {
@@ -40,13 +44,14 @@ const EachRow = ({
 
   const handleShowPasswordClick = () => {
     // so a pop-up screen asking for pin
+    // setShowPassword(true);
     if (eyeOpen) {
       //then we don't need to ask for pin
       //
       setEyeOpen(false);
       setEyeOpenAfterPin(false);
     } else {
-      setEyeOpen(true);
+      // setEyeOpen(true);
       setShowPin(true);
     }
   };
@@ -54,6 +59,18 @@ const EachRow = ({
   //   setEyeOpen(true);
   // }
   console.log(`After pin click : ${eyeOpenAfterPin} :: eyeOpen : ${eyeOpen}`);
+  useEffect(() => {
+    console.log("Outer running console....");
+    if (eyeOpen && eyeOpenAfterPin) {
+      console.log("Inner running console....");
+      const closeEyeTimer = setTimeout(() => {
+        console.log("Timer to close the eye start here ::....");
+        setEyeOpen(false);
+        setEyeOpenAfterPin(false);
+      }, 10000);
+      return () => clearTimeout(closeEyeTimer);
+    }
+  }, [eyeOpen]);
   return (
     <div className="flex relative ">
       <input
@@ -106,6 +123,14 @@ const EachRow = ({
           {note}
         </span>
       </div>
+      {showPin && (
+        <UserPin
+          setShowPin={setShowPin}
+          // setDisablePinButton={setDisablePinButton}
+          setEyeOpenAfterPin={setEyeOpenAfterPin}
+          setEyeOpen={setEyeOpen}
+        />
+      )}
     </div>
   );
 };

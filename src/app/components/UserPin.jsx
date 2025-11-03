@@ -9,7 +9,7 @@ const UserPin = ({
   length = 4,
   setEyeOpen,
   setDisablePinButton,
-  setEyeOpenAfterPin
+  setEyeOpenAfterPin,
 }) => {
   const inputRef = useRef([]);
   const [eachPin, setEachPin] = useState(["", "", "", ""]);
@@ -85,16 +85,17 @@ const UserPin = ({
       console.log("Gen pin value : ", res.data.data);
       setShowPin(false);
       setEyeOpenAfterPin(res.data.data);
-    //   setEyeOpen(res.data.data)
+      setEyeOpen(res.data.data);
     } catch (error) {
       console.error("Error while checking user pin. :: ", error);
     }
   };
 
-  const handlePinCancelClick=() => {
-    setEyeOpenAfterPin(false)
-    setShowPin(false)
-  }
+  const handlePinCancelClick = () => {
+    setEyeOpenAfterPin(false);
+    setShowPin(false);
+    setEyeOpen(false);
+  };
 
   console.log("Each pin : ", eachPin);
   console.log("Pin :", pin);

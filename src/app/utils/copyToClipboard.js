@@ -13,14 +13,14 @@ const fallBackCopyTextToClipboard = (text) => {
   }
 };
 
-const copyToClipBoard = (text) => {
+const copyToClipBoard = async (text = "") => {
   if (!navigator.clipboard) {
     //Method using commandExec
     fallBackCopyTextToClipboard(text);
     return;
   }
   //First Method using navigator
-  navigator.clipboard.writeText(text).then(
+  await navigator.clipboard.writeText(text).then(
     () => {
       console.log("Copying to clipboard Successfully!");
     },
@@ -29,4 +29,4 @@ const copyToClipBoard = (text) => {
     }
   );
 };
-export {copyToClipBoard};
+export { copyToClipBoard };
