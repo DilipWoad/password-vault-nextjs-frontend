@@ -17,6 +17,8 @@ const userPasswordVault = () => {
   const [loading, setLoading] = useState(false);
   const [showCopiedStatus, setShowCopiedStatus] = useState(false);
   const [animation, setAnimation] = useState(false);
+  // const [copyEmpty, setCopyEmpty] = useState(false);
+  // const [count,setCount]=useState(0);
 
   const getVault = async () => {
     try {
@@ -85,33 +87,41 @@ const userPasswordVault = () => {
     const passwordDisplay = document.getElementById("passwordBox");
     // console.log("Password Display : ",passwordDisplay.innerHTML)
     const text = passwordDisplay?.innerHTML;
-    console.log("Texxxxxxxxxxxxxxxxxt : ",text)
-    if(text !== undefined){
+    console.log("Texxxxxxxxxxxxxxxxxt : ", text);
+    if (text !== undefined) {
       copyToClipBoard(text);
       setShowCopiedStatus(true);
     }
   };
+  // if (copyEmpty && count===1) {
+  //   setTimeout(() => {
+  //     console.log("Is this iw running after 10sec??");
+  //     setShowCopiedStatus(false);
+  //     copyToClipBoard();
+  //     setCopyEmpty(false)
+  //     setCount(0);
+  //   }, 10000);
+  // }
+  // console.log("This much of time this component is render :: ",count)
   useEffect(() => {
-    vaults && getVault();
+    getVault();
+  }, []);
+  useEffect(() => {
     if (showCopiedStatus) {
-      // setShowCopiedStatus(false);
       setAnimation(false);
-
-      const hideTimer = setTimeout(() => {
-        console.log("Animation ?");
+   
+     const animationTimer = setTimeout(() => {
         setAnimation(true); // Start slide-out animation
-        setTimeout(() => {
-          console.log("Animation ?");
-          setShowCopiedStatus(false);
-        }, 2000); // Allow animation to complete
-        setTimeout(()=>{
-          console.log("Is this iw running after 10sec??")
-          setShowCopiedStatus(false);
-          copyToClipBoard();      
-        },10000)
       }, 2000); // Toast visible duration
 
-      return () => clearTimeout(hideTimer);
+      const hideTimer = setTimeout(() => {
+        setShowCopiedStatus(false);
+      }, 4000); // Total time to hide (2s visible + 2s animation)
+
+      return () => {
+        clearTimeout(animationTimer);
+        clearTimeout(hideTimer);
+      };
     }
   }, [showCopiedStatus]);
   if (!vaults) {
@@ -206,8 +216,6 @@ const userPasswordVault = () => {
             isEdit={true}
           />
         )}
-
-        
 
         {/* <button
         disabled={disablePinButton}

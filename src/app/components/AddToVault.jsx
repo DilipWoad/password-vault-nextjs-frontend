@@ -50,7 +50,7 @@ const AddToVault = ({
         console.log(res.data);
         console.log( "Does this add to the vault ? ",vaults);
         fromGenerator && setGeneratedPassword("")
-        !fromGenerator && setVaults([...vaults, res.data]);
+        !fromGenerator && setVaults([...vaults, res.data.data]);
         setShowAddToVaultForm(false);
       } else {
         const res = await axios.patch(
