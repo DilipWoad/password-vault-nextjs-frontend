@@ -124,7 +124,7 @@ const EachRow = ({
           href={url}
           target="_blank"
           rel="noopener"
-          className="flex-1 px-2 py-1 bg-sky-500 text-wrap min-w-0 border-y-1 border-l-1"
+          className="flex-1 px-2 py-1 bg-sky-500 text-wrap min-w-0 border-y-1 border-l-1 hover:underline transition-all duration-300"
         >
           {/* <-- THIS IS YOUR FIX: removed truncate, added min-w-0 & items-start */}
           {url}

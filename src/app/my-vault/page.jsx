@@ -8,6 +8,7 @@ import AddToVault from "../components/AddToVault.jsx";
 import { copyToClipBoard } from "../utils/copyToClipboard.js";
 import ShowPasswordContextProvider from "../context/ShowPasswordContextProvider.jsx";
 import ComfirmationBox from "../components/ComfirmationBox.jsx";
+import Link from "next/link.js";
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -19,10 +20,12 @@ const userPasswordVault = () => {
   const [showCopiedStatus, setShowCopiedStatus] = useState(false);
   const [animation, setAnimation] = useState(false);
   const [showComfirmationBox, setShowComfirmationBox] = useState(false);
+  const [disablePinButton, setDisablePinButton] = useState(true);
   // const [copyEmpty, setCopyEmpty] = useState(false);
   // const [count,setCount]=useState(0);
 
   const getVault = async () => {
+    setLoading(true);
     try {
       console.log("inside");
       const res = await axios.get(`${BASE_URL}/vault`, {
@@ -32,9 +35,11 @@ const userPasswordVault = () => {
       setVaults(res.data.data);
     } catch (error) {
       console.log("Error while fetching user vault");
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   // console.log("Vault after deletion : ", arrayAfterDeletion);
   const handleEditClick = () => {
     setShowEditForm(true);
@@ -83,7 +88,7 @@ const userPasswordVault = () => {
   return (
     <ShowPasswordContextProvider>
       <div className="bg-red-500 flex items-center justify-center h-screen relative">
-        <div className="bg-green-500 w-auto pt-2 pb-10 px-10 rounded-lg ">
+        <div className="bg-green-500 w-auto pt-2 pb-4 px-10 rounded-lg ">
           <div className=" flex justify-between mb-4 mt-5  text-sm  font-mono font-semibold">
             <button
               disabled={selectedRow.length < 1}
@@ -149,6 +154,22 @@ const userPasswordVault = () => {
                 handleCopyClick={handleCopyClick}
               />
             ))}
+          <div className="py-2 flex gap-4 justify-center font-semibold text-sm">
+            <button
+            disabled={disablePinButton}
+            // onClick={handleGeneratePinClick}
+            className={`${
+              disablePinButton
+                ? "hover:cursor-not-allowed hover:bg-blue-400 hover:text-gray-600 bg-blue-300 text-gray-500"
+                : "bg-blue-500 hover:cursor-pointer hover:bg-blue-600 text-white"
+            }  px-3 py-2 rounded-md  `}
+          >
+            Generate Pin
+          </button>
+          <Link className="px-5 py-2 bg-blue-500 rounded-md" href={'/password-generator'} rel="_blank">
+          Generate Password
+          </Link>
+          </div>
         </div>
 
         {showAddToVaultForm && (
@@ -180,17 +201,6 @@ const userPasswordVault = () => {
           />
         )}
 
-        {/* <button
-        disabled={disablePinButton}
-        // onClick={handleGeneratePinClick}
-        className={`${
-          disablePinButton
-            ? "hover:cursor-not-allowed hover:bg-blue-400 hover:text-gray-600 bg-blue-300 text-gray-500"
-            : "bg-blue-500 hover:cursor-pointer hover:bg-blue-600 text-white"
-        }  px-3 py-2 rounded-md  font-semibold text-sm`}
-      >
-        Generate Pin
-      </button> */}
         {showCopiedStatus && (
           <p
             className={`bg-yellow-500 px-2 py-1 text-sm w-fit absolute top-50 transition-all duration-1000 ${

@@ -14,7 +14,7 @@ const UserPin = ({
   const inputRef = useRef([]);
   const [eachPin, setEachPin] = useState(["", "", "", ""]);
   const [pin, setPin] = useState("");
-  const [error,setError] = useState("");
+  const [error,setError] = useState(null);
 
   const handleInputChange = (value, index) => {
     //we have the value -> means onChange in the input we got the text typed on it
@@ -108,9 +108,8 @@ const UserPin = ({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className=" bg-black/85 rounded-md h-auto flex flex-col justify-between p-2 font-mono">
-      <p className={`${error ? "text-red-500" :""}  pt-2 pb-4 text-center`}>{error}</p>
-
-        <div className="flex  gap-3 justify-center items-center flex-1 pb-5">
+      <p className="text-white text-lg text-center ">Enter Pin</p>
+        <div className="flex  gap-3 justify-center items-center py-2 flex-1 ">
           {Array.from({ length }, (_, index) => (
             <input
               key={index}
@@ -118,12 +117,14 @@ const UserPin = ({
               defaultValue={eachPin[index]}
               onChange={(e) => handleInputChange(e.target.value, index)}
               ref={(element) => (inputRef.current[index] = element)}
-              className="bg-gray-100 w-10 h-12 rounded-md text-center text-2xl border-2 border-solid border-border-slate-500 focus:border-blue-600 outline-none "
+              className={`${error && eachPin[index].length===1 ?"border-red-600" :"focus:border-blue-600"} bg-gray-100 w-10 h-12 rounded-md text-center text-2xl border-2 border-solid border-border-slate-500  outline-none `}
               maxLength={1}
             />
           ))}
         </div>
-        <div className=" flex gap-3 justify-center">
+      <p className={`${error ? "text-red-500" :""}  py-2  text-center text-sm `}>{error}</p>
+
+        <div className=" flex gap-3 justify-center ">
           <button
             onClick={handlePinCancelClick}
             className="px-7 py-2 text-sm hover:bg-gray-300 hover:text-gray-500  bg-gray-200 font-semibold rounded-md"
