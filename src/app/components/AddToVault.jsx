@@ -15,6 +15,7 @@ const AddToVault = ({
   isEdit,
   setGeneratedPassword,
   fromGenerator,
+  setSelectedRow
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -29,14 +30,7 @@ const AddToVault = ({
   const [vaultForm, setVaultForm] = useState(vaultFormObj);
 
   console.log("Vault form : ", vaultForm);
-  //   const handleVaultFormChange = (e) => {
-  //     const { name, value } = e.target;
 
-  //     setVaultForm((prevState) => ({
-  //       ...prevState,
-  //       [name]: value,
-  //     }));
-  //   };
   const createVault = async (e) => {
     // let redirectPath = null;
     e.preventDefault();
@@ -85,22 +79,13 @@ const AddToVault = ({
     }
   };
 
-  //   const handlePinSubmit = async (e) => {
-  //     e.preventDefault();
-  //     //first check if pin and retry-pin are same
-  //     if (pin.length !== 4) {
-  //       console.error("Pin length should be 4.");
-  //     }
-  //     if (pin !== retypePin) {
-  //       console.error("Pin and the retypePin are not same.");
-  //       return;
-  //     }
-  //     // console.log(loginDetails);
-  //     await generatePin();
-  //   };
-
   const handleCancelVaultForm = () => {
+    if(isEdit){
+      console.log("is cancel form?")
+      setSelectedRow([])
+    }
     setShowAddToVaultForm(false);
+    
   };
 
   // const handlePinSubmit=()=>{

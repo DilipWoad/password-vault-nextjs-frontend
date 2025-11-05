@@ -81,6 +81,7 @@ const userPasswordVault = () => {
   // };
 
   console.log("Selected edit Row : ", editVault);
+  console.log("Does it get update the selected row to [] after cancel : ",selectedRow)
 
   const handleCopyClick = async () => {
     //get the display-password div element
@@ -93,16 +94,7 @@ const userPasswordVault = () => {
       setShowCopiedStatus(true);
     }
   };
-  // if (copyEmpty && count===1) {
-  //   setTimeout(() => {
-  //     console.log("Is this iw running after 10sec??");
-  //     setShowCopiedStatus(false);
-  //     copyToClipBoard();
-  //     setCopyEmpty(false)
-  //     setCount(0);
-  //   }, 10000);
-  // }
-  // console.log("This much of time this component is render :: ",count)
+
   useEffect(() => {
     getVault();
   }, []);
@@ -214,6 +206,7 @@ const userPasswordVault = () => {
             vaults={vaults}
             editVault={editVault}
             isEdit={true}
+            setSelectedRow={setSelectedRow}
           />
         )}
 

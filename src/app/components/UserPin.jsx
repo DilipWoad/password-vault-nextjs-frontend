@@ -14,6 +14,7 @@ const UserPin = ({
   const inputRef = useRef([]);
   const [eachPin, setEachPin] = useState(["", "", "", ""]);
   const [pin, setPin] = useState("");
+  const [error,setError] = useState("");
 
   const handleInputChange = (value, index) => {
     //we have the value -> means onChange in the input we got the text typed on it
@@ -83,7 +84,12 @@ const UserPin = ({
       );
 
       console.log("Gen pin value : ", res.data.data);
+      if(res.data.data){
       setShowPin(false);
+      }else{
+        setError("Invalid Pin")
+      }
+
       setEyeOpenAfterPin(res.data.data);
       setEyeOpen(res.data.data);
     } catch (error) {
@@ -101,8 +107,10 @@ const UserPin = ({
   console.log("Pin :", pin);
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className=" bg-black/85 rounded-md h-48 flex flex-col justify-between p-2">
-        <div className="flex  gap-3 justify-center items-center flex-1">
+      <div className=" bg-black/85 rounded-md h-auto flex flex-col justify-between p-2 font-mono">
+      <p className={`${error ? "text-red-500" :""}  pt-2 pb-4 text-center`}>{error}</p>
+
+        <div className="flex  gap-3 justify-center items-center flex-1 pb-5">
           {Array.from({ length }, (_, index) => (
             <input
               key={index}
