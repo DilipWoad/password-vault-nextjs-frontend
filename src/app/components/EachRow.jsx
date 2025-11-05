@@ -7,6 +7,7 @@ import ShowPasswordContext from "../context/ShowPasswordContext.js";
 import LoadingScreen from "./LoadingScreen.jsx";
 import UserPin from "./UserPin.jsx";
 import Link from "next/link.js";
+import PinForm from "./PinForm.jsx";
 
 const EachRow = ({
   vault,
@@ -17,6 +18,8 @@ const EachRow = ({
   setEditVault,
   handleCopyClick,
   id,
+  showGeneratePinBox,
+  setShowGeneratePinBox
 }) => {
   const { title, username, password, note, url, _id } = vault;
   const [eyeOpen, setEyeOpen] = useState(false);
@@ -148,6 +151,7 @@ const EachRow = ({
           setEyeOpen={setEyeOpen}
         />
       )}
+      {/* {showGeneratePinBox && eyeOpen && <PinForm setShowGeneratePinBox={setShowGeneratePinBox}/> } */}
     </div>
   );
 };

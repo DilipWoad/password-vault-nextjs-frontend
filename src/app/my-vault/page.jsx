@@ -9,6 +9,7 @@ import { copyToClipBoard } from "../utils/copyToClipboard.js";
 import ShowPasswordContextProvider from "../context/ShowPasswordContextProvider.jsx";
 import ComfirmationBox from "../components/ComfirmationBox.jsx";
 import Link from "next/link.js";
+import PinForm from "../components/PinForm.jsx";
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -21,6 +22,9 @@ const userPasswordVault = () => {
   const [animation, setAnimation] = useState(false);
   const [showComfirmationBox, setShowComfirmationBox] = useState(false);
   const [disablePinButton, setDisablePinButton] = useState(true);
+  const [pinExists,setPinExists] = useState(false);
+  const [showGeneratePinBox, setShowGeneratePinBox] = useState(false);
+
   // const [copyEmpty, setCopyEmpty] = useState(false);
   // const [count,setCount]=useState(0);
 
@@ -61,8 +65,29 @@ const userPasswordVault = () => {
     setShowComfirmationBox(true);
   };
 
-  useEffect(() => {
+  const userPinExists = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/vault/pin`, {
+          withCredentials: true,
+        });
+
+        console.log("sdfghjkl;")
+        return res.data.data.pinCreated;
+      } catch (error) {
+        console.error("Error while checking user Pin exists.");
+        return false;
+      }
+    };
+
+    const handleGeneratePinClick=()=>{
+      setShowGeneratePinBox(true)
+    }
+  useEffect(async() => {
     getVault();
+    const VaultPinExists = await userPinExists();
+    console.log("Vault pin exists",VaultPinExists)
+    setDisablePinButton(VaultPinExists)
+    setPinExists(VaultPinExists);
   }, []);
   useEffect(() => {
     if (showCopiedStatus) {
@@ -152,12 +177,14 @@ const userPasswordVault = () => {
                 setEditVault={setEditVault}
                 id={"passwordBox"}
                 handleCopyClick={handleCopyClick}
+                showGeneratePinBox={showGeneratePinBox}
+                setShowGeneratePinBox={setShowGeneratePinBox}
               />
             ))}
           <div className="py-2 flex gap-4 justify-center font-semibold text-sm">
             <button
             disabled={disablePinButton}
-            // onClick={handleGeneratePinClick}
+            onClick={handleGeneratePinClick}
             className={`${
               disablePinButton
                 ? "hover:cursor-not-allowed hover:bg-blue-400 hover:text-gray-600 bg-blue-300 text-gray-500"
@@ -171,6 +198,11 @@ const userPasswordVault = () => {
           </Link>
           </div>
         </div>
+
+
+        {
+          showGeneratePinBox && <PinForm setShowGeneratePinBox={setShowGeneratePinBox}/>
+        }
 
         {showAddToVaultForm && (
           <AddToVault
