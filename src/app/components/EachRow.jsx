@@ -94,7 +94,7 @@ const EachRow = ({
         </span>
 
         {/* <-- Password column fix --> */}
-        <span className="flex flex-1 px-2 py-1  bg-violet-500 items-center justify-between border-l-1 border-y-1  ">
+        <span className="flex flex-1 px-2 py-1 min-w-0  bg-violet-500 max-w-[155px] items-center justify-between border-l-1 border-y-1  ">
           <span
             onClick={() => handleCopyClick()}
             id={`${eyeOpen ? id : ""}`}
@@ -102,10 +102,10 @@ const EachRow = ({
               eyeOpen ? "hover:cursor-pointer" : "hover:cursor-not-allowed"
             } 
             font-mono px-1 py-1 
-            flex-1 truncate
+            flex-1 truncate 
             `}
           >
-            {eyeOpen && eyeOpenAfterPin ? password : "**************"}
+            {eyeOpen && eyeOpenAfterPin ? password : "*************"}
           </span>
           <div
             onClick={handleShowPasswordClick}

@@ -7,6 +7,7 @@ import EachRow from "../components/EachRow.jsx";
 import AddToVault from "../components/AddToVault.jsx";
 import { copyToClipBoard } from "../utils/copyToClipboard.js";
 import ShowPasswordContextProvider from "../context/ShowPasswordContextProvider.jsx";
+import ComfirmationBox from "../components/ComfirmationBox.jsx";
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -17,6 +18,7 @@ const userPasswordVault = () => {
   const [loading, setLoading] = useState(false);
   const [showCopiedStatus, setShowCopiedStatus] = useState(false);
   const [animation, setAnimation] = useState(false);
+  const [showComfirmationBox, setShowComfirmationBox] = useState(false);
   // const [copyEmpty, setCopyEmpty] = useState(false);
   // const [count,setCount]=useState(0);
 
@@ -32,56 +34,11 @@ const userPasswordVault = () => {
       console.log("Error while fetching user vault");
     }
   };
-  const handleDelete = async (arr) => {
-    setLoading(true);
-    try {
-      // await axiosInstance.delete()
-      const deleteArrayOfPromises = arr.map(
-        async (vaultId) =>
-          await axios.delete(`${BASE_URL}/vault/${vaultId}`, {
-            withCredentials: true,
-          })
-      );
-      //res give array of promises and it takes too much of time
-      //this happens because this map func is fast it objective is over
-      //but the request are waiting for each to finished so it lead to longer time
-      //so we should do is promis.All to resolve all the pending promise in parallel
-      const res = await Promise.all(deleteArrayOfPromises);
-      console.log(res);
-      //now remove the vault from the ui
-      const arrayAfterDeletion = vaults.filter(
-        (vault) => !selectedRow.includes(vault._id)
-      );
-      setVaults(arrayAfterDeletion);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-      setSelectedRow([]);
-    }
-  };
-
+  
   // console.log("Vault after deletion : ", arrayAfterDeletion);
   const handleEditClick = () => {
     setShowEditForm(true);
   };
-  // const handleSaveEditClick = async (id) => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await axios.patch(`${BASE_URL}/vault/${id}`, {
-  //       withCredentials: true,
-  //     });
-  //     setVaults(res.data.data);
-  //   } catch (error) {
-  //   } finally {
-  //     setLoading(false);
-  //     setVideoEditOption(true);
-  //     setSelectedRow([]);
-  //   }
-  // };
-
-  console.log("Selected edit Row : ", editVault);
-  console.log("Does it get update the selected row to [] after cancel : ",selectedRow)
 
   const handleCopyClick = async () => {
     //get the display-password div element
@@ -95,14 +52,18 @@ const userPasswordVault = () => {
     }
   };
 
+  const handleDeleteClick = () => {
+    setShowComfirmationBox(true);
+  };
+
   useEffect(() => {
     getVault();
   }, []);
   useEffect(() => {
     if (showCopiedStatus) {
       setAnimation(false);
-   
-     const animationTimer = setTimeout(() => {
+
+      const animationTimer = setTimeout(() => {
         setAnimation(true); // Start slide-out animation
       }, 2000); // Toast visible duration
 
@@ -126,7 +87,7 @@ const userPasswordVault = () => {
           <div className=" flex justify-between mb-4 mt-5  text-sm  font-mono font-semibold">
             <button
               disabled={selectedRow.length < 1}
-              onClick={() => handleDelete(selectedRow)}
+              onClick={handleDeleteClick}
               className={`${
                 selectedRow.length >= 1
                   ? "hover:bg-red-500      bg-red-600 hover:cursor-pointer hover:text-gray-200 "
@@ -207,6 +168,15 @@ const userPasswordVault = () => {
             editVault={editVault}
             isEdit={true}
             setSelectedRow={setSelectedRow}
+          />
+        )}
+        {showComfirmationBox && (
+          <ComfirmationBox
+            setShowComfirmationBox={setShowComfirmationBox}
+            setSelectedRow={setSelectedRow}
+            selectedRow={selectedRow}
+            vaults={vaults}
+            setVaults={setVaults}
           />
         )}
 
