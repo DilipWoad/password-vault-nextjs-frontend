@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import { BASE_URL } from "../constant.js";
 import LoadingScreen from "../components/LoadingScreen.jsx";
-import EachRow from "../components/EachRow.jsx";
+import { deriveKey } from "../utils/deriveKey.js";
+import { useEncryptionContext } from "../utils/ContextApi/EncryptionContext.js";
 
 export default function login() {
   const loginFormObj = {
@@ -14,19 +15,36 @@ export default function login() {
   };
   const [loginDetails, setLoginDetails] = useState(loginFormObj);
   const [loading, setLoading] = useState(false);
+  // const [sessionEncryptionKey,setSessionEncryptionKey] = useState(null);
+  const { updateSessionEncryptionState } =
+    useEncryptionContext();
   const loginUser = async () => {
     let redirectPath = null;
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/auth/login`, loginDetails,{withCredentials:true});
+      const res = await axios.post(`${BASE_URL}/auth/login`, loginDetails, {
+        withCredentials: true,
+      });
       // console.log(res.data);
       redirectPath = "/home";
+      //Actually to should have context api to hold user info
+      const master_password = loginDetails.password;
+
+      // const salt = base64ToBuffer(res.data.data.user.enc_salt);
+      const salt = Buffer.from(res.data.data.user.enc_salt, "base64");
+      console.log("salt :: ", salt);
+      // const sessionEncKey = await generateSessionEncryptionKey(master_password,salt);
+      const sessionEncKey = await deriveKey(master_password, salt);
+      console.log("sessionEncKey ::", sessionEncKey);
+      // setSessionEncryptionKey(sessionEncKey);
+      updateSessionEncryptionState(sessionEncKey);
       setLoading(false);
     } catch (error) {
       console.log("Error while login : ", error);
       redirectPath = "/login";
       setLoading(false);
     } finally {
+      setLoginDetails((prev) => ({ ...prev, password: "" }));
       if (redirectPath) {
         redirect(redirectPath);
       }

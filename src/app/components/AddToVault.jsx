@@ -6,6 +6,8 @@ import CommonFormInputs from "./CommonFormInputs.jsx";
 import axios from "axios";
 import { BASE_URL } from "../constant.js";
 import LoadingScreen from "./LoadingScreen.jsx";
+import { encryptData } from "../utils/encryptData.js";
+import { useEncryptionContext } from "../utils/ContextApi/EncryptionContext.js";
 
 const AddToVault = ({
   setShowAddToVaultForm,
@@ -15,9 +17,10 @@ const AddToVault = ({
   isEdit,
   setGeneratedPassword,
   fromGenerator,
-  setSelectedRow
+  setSelectedRow,
 }) => {
   const [loading, setLoading] = useState(false);
+  const { sessionEncryptionKey } = useEncryptionContext();
 
   const vaultFormObj = {
     title: `${isEdit ? editVault.title : ""}`,
@@ -36,20 +39,36 @@ const AddToVault = ({
     e.preventDefault();
     console.log("Inside Generate Vault.");
     setLoading(true);
+    const encryptedPassword = await encryptData(
+      sessionEncryptionKey,
+      vaultForm.password
+    );
     try {
       if (!isEdit) {
-        const res = await axios.post(`${BASE_URL}/vault`, vaultForm, {
-          withCredentials: true,
-        });
+        const res = await axios.post(
+          `${BASE_URL}/vault`,
+          {
+            ...vaultForm,
+            password: encryptedPassword.cipherText,
+            iv: encryptedPassword.iv,
+          },
+          {
+            withCredentials: true,
+          }
+        );
         console.log(res.data);
-        console.log( "Does this add to the vault ? ",vaults);
-        fromGenerator && setGeneratedPassword("")
+        console.log("Does this add to the vault ? ", vaults);
+        fromGenerator && setGeneratedPassword("");
         !fromGenerator && setVaults([...vaults, res.data.data]);
         setShowAddToVaultForm(false);
       } else {
         const res = await axios.patch(
           `${BASE_URL}/vault/${editVault._id}`,
-          vaultForm,
+          {
+            ...vaultForm,
+            password: encryptedPassword.cipherText,
+            iv: encryptedPassword.iv,
+          },
           {
             withCredentials: true,
           }
@@ -65,7 +84,7 @@ const AddToVault = ({
         oldVault.url = vaultForm.url;
         oldVault.note = vaultForm.note;
 
-        console.log( "Does this updated the vault ? ",vaults);
+        console.log("Does this updated the vault ? ", vaults);
         setVaults(vaults);
         setShowAddToVaultForm(false);
       }
@@ -74,18 +93,17 @@ const AddToVault = ({
       console.error("Error while creating vault: ", error);
       //   redirectPath = "/login";
       setLoading(false);
-    }finally{
+    } finally {
       setShowAddToVaultForm(false);
     }
   };
 
   const handleCancelVaultForm = () => {
-    if(isEdit){
-      console.log("is cancel form?")
-      setSelectedRow([])
+    if (isEdit) {
+      console.log("is cancel form?");
+      setSelectedRow([]);
     }
     setShowAddToVaultForm(false);
-    
   };
 
   // const handlePinSubmit=()=>{

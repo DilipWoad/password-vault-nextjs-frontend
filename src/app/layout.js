@@ -1,8 +1,11 @@
 import "./globals.css";
+import { EncryptionContextProvider } from "./utils/ContextApi/EncryptionContext.js";
 export default function RootLayout({ children }) {
   return (
     <html>
-      <body>{children}</body>
+      <body>
+        <EncryptionContextProvider>{children}</EncryptionContextProvider>
+      </body>
     </html>
   );
 }

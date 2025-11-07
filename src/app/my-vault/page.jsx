@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoadingScreen from "../components/LoadingScreen.jsx";
 import axios from "axios";
 import { BASE_URL } from "../constant";
@@ -10,6 +10,7 @@ import ShowPasswordContextProvider from "../context/ShowPasswordContextProvider.
 import ComfirmationBox from "../components/ComfirmationBox.jsx";
 import Link from "next/link.js";
 import PinForm from "../components/PinForm.jsx";
+import { EncryptionContext, useEncryptionContext } from "../utils/ContextApi/EncryptionContext.js";
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -25,8 +26,15 @@ const userPasswordVault = () => {
   const [pinExists,setPinExists] = useState(false);
   const [showGeneratePinBox, setShowGeneratePinBox] = useState(false);
 
+
+  ///////////
+  const {sessionEncryptionKey}= useContext(EncryptionContext);
+
+  ///////////
   // const [copyEmpty, setCopyEmpty] = useState(false);
   // const [count,setCount]=useState(0);
+
+
 
   const getVault = async () => {
     setLoading(true);
@@ -82,9 +90,10 @@ const userPasswordVault = () => {
     const handleGeneratePinClick=()=>{
       setShowGeneratePinBox(true)
     }
-  useEffect(async() => {
+  useEffect(() => {
+  console.log("SessionObj :: ",sessionEncryptionKey)
     getVault();
-    const VaultPinExists = await userPinExists();
+    const VaultPinExists = userPinExists();
     console.log("Vault pin exists",VaultPinExists)
     setDisablePinButton(VaultPinExists)
     setPinExists(VaultPinExists);
