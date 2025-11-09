@@ -1,3 +1,5 @@
+import { bufferToBase64 } from "./Base64Helper.js";
+
 export const encryptData=async(cryptoKeyObject,hidingData)=>{
     try {
         //1) make a textEncoder obj
@@ -16,14 +18,18 @@ export const encryptData=async(cryptoKeyObject,hidingData)=>{
         )
         console.log("Encrypted Buffer :: ",encryptedBuffer)
         // console.log("using toString on cipher :: ",encryptedBuffer.toString("base64"))
-        const bufferEncryption = Buffer.from(encryptedBuffer, 'base64');
-        console.log("using Buffer on cipher :: ",bufferEncryption)
+        // const bufferEncryption1 = Buffer.from(encryptedBuffer, 'base64');
+       
 
-        console.log("using toString on iv :: ",iv.toString("base64"))
+        // console.log("using Buffer on cipher :: ",bufferEncryption1)
+        console.log("using BufferToBase64 on cipher :: ",bufferToBase64(encryptedBuffer))
+
+        // console.log("using toString on iv :: ",iv.toString("base64"))
+        console.log("using bufferToBase64 on iv :: ",bufferToBase64(iv))
 
         return {
-            cipherText:bufferEncryption,
-            iv:iv.toString("base64")
+            cipherText:bufferToBase64(encryptedBuffer),
+            iv:bufferToBase64(iv)
         }
     } catch (error) {
         console.error("Error while encrypting the vault password :: ",error.message)
