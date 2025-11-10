@@ -60,17 +60,21 @@ const userPasswordVault = () => {
   const handleCopyClick = async () => {
     //get the display-password div element
     const passwordDisplay = document.getElementById("passwordBox");
-    // console.log("Password Display : ",passwordDisplay.innerHTML)
-    const selected = passwordDisplay.select();
 
-    console.log("Selected text :: ", selected);
-
-    const text = passwordDisplay?.innerHTML;
-    console.log("Texxxxxxxxxxxxxxxxxt : ", text);
-    if (text !== undefined) {
-      copyToClipBoard(text);
+    // const text = passwordDisplay?.innerHTML;
+    // console.log("Texxxxxxxxxxxxxxxxxt : ", text);
+    // if (text !== undefined) {
+    //   copyToClipBoard(text);
+    //   setShowCopiedStatus(true);
+    // }
+    if (passwordDisplay) {
+      const selected = passwordDisplay?.select();
+      console.log("Selected text :: ", selected);
+      document?.execCommand("copy");
       setShowCopiedStatus(true);
     }
+
+    // passwordDisplay?.setSelectionRange(0, 0);
   };
 
   const handleDeleteClick = () => {
