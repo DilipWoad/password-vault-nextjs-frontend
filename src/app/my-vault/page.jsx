@@ -14,6 +14,8 @@ import {
   EncryptionContext,
   useEncryptionContext,
 } from "../utils/ContextApi/EncryptionContext.js";
+import { redirect } from "next/navigation";
+
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -100,6 +102,11 @@ const userPasswordVault = () => {
   };
   useEffect(() => {
     console.log("SessionObj :: ", sessionEncryptionKey);
+    if (!sessionEncryptionKey) {
+      console.log("No key in memory. Redirecting to login.");
+
+      redirect("/login");
+    }
     getVault();
     const VaultPinExists = userPinExists();
     console.log("Vault pin exists", VaultPinExists);

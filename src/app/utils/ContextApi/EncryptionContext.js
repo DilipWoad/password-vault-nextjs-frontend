@@ -11,11 +11,17 @@ export const EncryptionContextProvider = ({ children }) => {
     setSessionEncryptionKey(newValue);
   };
 
+
+  const clearSessionEncryptionState = () => {
+    console.log("Encryption Key cleared from context. Vault is locked.");
+    setSessionEncryptionKey(null);
+  };
   return (
     <EncryptionContext.Provider
       value={{
         sessionEncryptionKey,
         updateSessionEncryptionState,
+        clearSessionEncryptionState
       }}
     >
       {children}
