@@ -1,6 +1,6 @@
 import { bufferToBase64 } from "./Base64Helper.js";
 
-export const encryptData=async(cryptoKeyObject,hidingData)=>{
+export const encryptPassword=async(cryptoKeyObject,hidingData)=>{
     try {
         //1) make a textEncoder obj
         console.log("CryptoKeyObject :: ",cryptoKeyObject)

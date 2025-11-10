@@ -26,7 +26,7 @@ export const base64ToBuffer =(base64String)=>{
     //
     const binaryString = window.atob(base64String);
     const binaryString_length = binaryString.length;
-    const bytesArray = new Uint8Array(len);
+    const bytesArray = new Uint8Array(binaryString_length);
     //this bytesArray -> is in this form [0,0,0,0,0,0] array as it is just initialized with length 
     //so now we need to fill the array[index] with binaryStringChar[index] value;
     for(let i=0;i<binaryString_length;i++){

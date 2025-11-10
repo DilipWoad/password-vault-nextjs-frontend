@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { BASE_URL } from "../constant";
 import axios from "axios";
+import { decryptPassword } from "../utils/decryptPassword.js";
+import { EncryptionContext } from "../utils/ContextApi/EncryptionContext";
 
 const UserPin = ({
   setShowPin,
@@ -10,11 +12,16 @@ const UserPin = ({
   setEyeOpen,
   setDisablePinButton,
   setEyeOpenAfterPin,
+  cipherPassword,
+  setCipherPassword,
+  initializationVectorBase64,
 }) => {
   const inputRef = useRef([]);
   const [eachPin, setEachPin] = useState(["", "", "", ""]);
   const [pin, setPin] = useState("");
-  const [error,setError] = useState(null);
+  const [error, setError] = useState(null);
+
+  const { sessionEncryptionKey } = useContext(EncryptionContext);
 
   const handleInputChange = (value, index) => {
     //we have the value -> means onChange in the input we got the text typed on it
@@ -84,10 +91,18 @@ const UserPin = ({
       );
 
       console.log("Gen pin value : ", res.data.data);
-      if(res.data.data){
-      setShowPin(false);
-      }else{
-        setError("Invalid Pin")
+      if (res.data.data) {
+        //decrypt pass here
+        const truePassword = await decryptPassword(
+          sessionEncryptionKey,
+          initializationVectorBase64,
+          cipherPassword
+        );
+        console.log("Decoded Password is  :: ",truePassword)
+        setCipherPassword(truePassword);
+        setShowPin(false);
+      } else {
+        setError("Invalid Pin");
       }
 
       setEyeOpenAfterPin(res.data.data);
@@ -108,7 +123,7 @@ const UserPin = ({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className=" bg-black/85 rounded-md h-auto flex flex-col justify-between p-2 font-mono">
-      <p className="text-white text-lg text-center ">Enter Pin</p>
+        <p className="text-white text-lg text-center ">Enter Pin</p>
         <div className="flex  gap-3 justify-center items-center py-2 flex-1 ">
           {Array.from({ length }, (_, index) => (
             <input
@@ -117,12 +132,22 @@ const UserPin = ({
               defaultValue={eachPin[index]}
               onChange={(e) => handleInputChange(e.target.value, index)}
               ref={(element) => (inputRef.current[index] = element)}
-              className={`${error && eachPin[index].length===1 ?"border-red-600" :"focus:border-blue-600"} bg-gray-100 w-10 h-12 rounded-md text-center text-2xl border-2 border-solid border-border-slate-500  outline-none `}
+              className={`${
+                error && eachPin[index].length === 1
+                  ? "border-red-600"
+                  : "focus:border-blue-600"
+              } bg-gray-100 w-10 h-12 rounded-md text-center text-2xl border-2 border-solid border-border-slate-500  outline-none `}
               maxLength={1}
             />
           ))}
         </div>
-      <p className={`${error ? "text-red-500" :""}  py-2  text-center text-sm `}>{error}</p>
+        <p
+          className={`${
+            error ? "text-red-500" : ""
+          }  py-2  text-center text-sm `}
+        >
+          {error}
+        </p>
 
         <div className=" flex gap-3 justify-center ">
           <button

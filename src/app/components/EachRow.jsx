@@ -19,12 +19,14 @@ const EachRow = ({
   handleCopyClick,
   id,
   showGeneratePinBox,
-  setShowGeneratePinBox
+  setShowGeneratePinBox,
 }) => {
-  const { title, username, password, note, url, _id } = vault;
+  const { title, username, password, note, url, _id,iv } = vault;
   const [eyeOpen, setEyeOpen] = useState(false);
   const [eyeOpenAfterPin, setEyeOpenAfterPin] = useState(false);
   const [showPin, setShowPin] = useState(false);
+  const [cipherPassword,setCipherPassword] = useState(password);
+ 
 
   const isChecked = selectedRow.includes(_id)
 
@@ -40,7 +42,7 @@ const EachRow = ({
       setSelectedRow(newArray);
     }
   };
-
+///////////////////////// MAKE IV AS A STATE FOR EACH
   const handleShowPasswordClick = () => {
     // so a pop-up screen asking for pin
     // setShowPassword(true);
@@ -49,6 +51,7 @@ const EachRow = ({
       //
       setEyeOpen(false);
       setEyeOpenAfterPin(false);
+      setCipherPassword(password);
     } else {
       // setEyeOpen(true);
       setShowPin(true);
@@ -63,6 +66,7 @@ const EachRow = ({
         console.log("Timer to close the eye start here ::....");
         setEyeOpen(false);
         setEyeOpenAfterPin(false);
+        setCipherPassword(password);
       }, 10000);
       return () => clearTimeout(closeEyeTimer);
     }
@@ -90,36 +94,39 @@ const EachRow = ({
         >
           {title}
         </span>
-
         <span className="flex-1 px-2 py-1 bg-lime-500 truncate min-w-0 border-y-1 border-l-1 text-center">
           {/* <-- Kept truncate for username, but added min-w-0 and removed fixed width */}
           {username}
         </span>
 
         {/* <-- Password column fix --> */}
-        <span className="flex flex-1 px-2 py-1 min-w-0  bg-violet-500 max-w-[155px] items-center justify-between border-l-1 border-y-1  ">
-          <span
+        <span className="flex flex-1 px-2 py-1 min-w-0 z-10  bg-violet-500 items-center justify-between border-l-1 border-y-1 ">
+          <div className="bg-pink-200 flex">
+            <input
             onClick={() => handleCopyClick()}
             id={`${eyeOpen ? id : ""}`}
+            type={eyeOpen && eyeOpenAfterPin ? "text":"password"}
             className={` ${
               eyeOpen ? "hover:cursor-pointer" : "hover:cursor-not-allowed"
             } 
-            font-mono px-1 py-1 
-            flex-1 truncate 
+            font-mono px-1 py-1
+             truncate border-2
             `}
+            value={eyeOpen && eyeOpenAfterPin ? cipherPassword : password}
+            readOnly
           >
-            {eyeOpen && eyeOpenAfterPin ? password : "*************"}
-          </span>
+          </input>
           <div
             onClick={handleShowPasswordClick}
             className=" hover:cursor-pointer hover:bg-gray-300 rounded-md h-fit p-1 transition-all duration-300 
             flex-shrink-0 "
           >
             <img
-              className="w-5 "
+              className="w-5"
               src={eyeOpen && eyeOpenAfterPin ? OPEN_EYE : CLOSE_EYE}
               alt="see-password-icon"
             />
+          </div>
           </div>
         </span>
 
@@ -149,6 +156,9 @@ const EachRow = ({
           // setDisablePinButton={setDisablePinButton}
           setEyeOpenAfterPin={setEyeOpenAfterPin}
           setEyeOpen={setEyeOpen}
+          setCipherPassword={setCipherPassword}
+          cipherPassword={cipherPassword}
+          initializationVectorBase64={iv}
         />
       )}
       {/* {showGeneratePinBox && eyeOpen && <PinForm setShowGeneratePinBox={setShowGeneratePinBox}/> } */}

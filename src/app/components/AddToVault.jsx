@@ -6,7 +6,7 @@ import CommonFormInputs from "./CommonFormInputs.jsx";
 import axios from "axios";
 import { BASE_URL } from "../constant.js";
 import LoadingScreen from "./LoadingScreen.jsx";
-import { encryptData } from "../utils/encryptData.js";
+import { encryptPassword } from "../utils/encryptPassword.js";
 import { useEncryptionContext } from "../utils/ContextApi/EncryptionContext.js";
 
 const AddToVault = ({
@@ -39,7 +39,7 @@ const AddToVault = ({
     e.preventDefault();
     console.log("Inside Generate Vault.");
     setLoading(true);
-    const encryptedPassword = await encryptData(
+    const encryptedPassword = await encryptPassword(
       sessionEncryptionKey,
       vaultForm.password
     );

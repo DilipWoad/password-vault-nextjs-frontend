@@ -10,7 +10,10 @@ import ShowPasswordContextProvider from "../context/ShowPasswordContextProvider.
 import ComfirmationBox from "../components/ComfirmationBox.jsx";
 import Link from "next/link.js";
 import PinForm from "../components/PinForm.jsx";
-import { EncryptionContext, useEncryptionContext } from "../utils/ContextApi/EncryptionContext.js";
+import {
+  EncryptionContext,
+  useEncryptionContext,
+} from "../utils/ContextApi/EncryptionContext.js";
 
 const userPasswordVault = () => {
   const [vaults, setVaults] = useState([]);
@@ -23,18 +26,15 @@ const userPasswordVault = () => {
   const [animation, setAnimation] = useState(false);
   const [showComfirmationBox, setShowComfirmationBox] = useState(false);
   const [disablePinButton, setDisablePinButton] = useState(true);
-  const [pinExists,setPinExists] = useState(false);
+  const [pinExists, setPinExists] = useState(false);
   const [showGeneratePinBox, setShowGeneratePinBox] = useState(false);
 
-
   ///////////
-  const {sessionEncryptionKey}= useContext(EncryptionContext);
+  const { sessionEncryptionKey } = useContext(EncryptionContext);
 
   ///////////
   // const [copyEmpty, setCopyEmpty] = useState(false);
   // const [count,setCount]=useState(0);
-
-
 
   const getVault = async () => {
     setLoading(true);
@@ -61,6 +61,10 @@ const userPasswordVault = () => {
     //get the display-password div element
     const passwordDisplay = document.getElementById("passwordBox");
     // console.log("Password Display : ",passwordDisplay.innerHTML)
+    const selected = passwordDisplay.select();
+
+    console.log("Selected text :: ", selected);
+
     const text = passwordDisplay?.innerHTML;
     console.log("Texxxxxxxxxxxxxxxxxt : ", text);
     if (text !== undefined) {
@@ -74,28 +78,28 @@ const userPasswordVault = () => {
   };
 
   const userPinExists = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/vault/pin`, {
-          withCredentials: true,
-        });
+    try {
+      const res = await axios.get(`${BASE_URL}/vault/pin`, {
+        withCredentials: true,
+      });
 
-        console.log("sdfghjkl;")
-        return res.data.data.pinCreated;
-      } catch (error) {
-        console.error("Error while checking user Pin exists.");
-        return false;
-      }
-    };
-
-    const handleGeneratePinClick=()=>{
-      setShowGeneratePinBox(true)
+      console.log("sdfghjkl;");
+      return res.data.data.pinCreated;
+    } catch (error) {
+      console.error("Error while checking user Pin exists.");
+      return false;
     }
+  };
+
+  const handleGeneratePinClick = () => {
+    setShowGeneratePinBox(true);
+  };
   useEffect(() => {
-  console.log("SessionObj :: ",sessionEncryptionKey)
+    console.log("SessionObj :: ", sessionEncryptionKey);
     getVault();
     const VaultPinExists = userPinExists();
-    console.log("Vault pin exists",VaultPinExists)
-    setDisablePinButton(VaultPinExists)
+    console.log("Vault pin exists", VaultPinExists);
+    setDisablePinButton(VaultPinExists);
     setPinExists(VaultPinExists);
   }, []);
   useEffect(() => {
@@ -192,26 +196,29 @@ const userPasswordVault = () => {
             ))}
           <div className="py-2 flex gap-4 justify-center font-semibold text-sm">
             <button
-            disabled={disablePinButton}
-            onClick={handleGeneratePinClick}
-            className={`${
-              disablePinButton
-                ? "hover:cursor-not-allowed hover:bg-blue-400 hover:text-gray-600 bg-blue-300 text-gray-500"
-                : "bg-blue-500 hover:cursor-pointer hover:bg-blue-600 text-white"
-            }  px-3 py-2 rounded-md  `}
-          >
-            Generate Pin
-          </button>
-          <Link className="px-5 py-2 bg-blue-500 rounded-md" href={'/password-generator'} rel="_blank">
-          Generate Password
-          </Link>
+              disabled={disablePinButton}
+              onClick={handleGeneratePinClick}
+              className={`${
+                disablePinButton
+                  ? "hover:cursor-not-allowed hover:bg-blue-400 hover:text-gray-600 bg-blue-300 text-gray-500"
+                  : "bg-blue-500 hover:cursor-pointer hover:bg-blue-600 text-white"
+              }  px-3 py-2 rounded-md  `}
+            >
+              Generate Pin
+            </button>
+            <Link
+              className="px-5 py-2 bg-blue-500 rounded-md"
+              href={"/password-generator"}
+              rel="_blank"
+            >
+              Generate Password
+            </Link>
           </div>
         </div>
 
-
-        {
-          showGeneratePinBox && <PinForm setShowGeneratePinBox={setShowGeneratePinBox}/>
-        }
+        {showGeneratePinBox && (
+          <PinForm setShowGeneratePinBox={setShowGeneratePinBox} />
+        )}
 
         {showAddToVaultForm && (
           <AddToVault
