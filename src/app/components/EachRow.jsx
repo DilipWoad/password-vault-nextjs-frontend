@@ -1,13 +1,10 @@
 "use client";
 
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CLOSE_EYE, OPEN_EYE } from "../constant.js";
-import ShowPasswordContext from "../context/ShowPasswordContext.js";
 import LoadingScreen from "./LoadingScreen.jsx";
 import UserPin from "./UserPin.jsx";
 import Link from "next/link.js";
-import PinForm from "./PinForm.jsx";
 
 const EachRow = ({
   vault,
@@ -18,8 +15,6 @@ const EachRow = ({
   setEditVault,
   handleCopyClick,
   id,
-  showGeneratePinBox,
-  setShowGeneratePinBox,
 }) => {
   const { title, username, password, note, url, _id,iv } = vault;
   const [eyeOpen, setEyeOpen] = useState(false);
@@ -100,8 +95,8 @@ const EachRow = ({
         </span>
 
         {/* <-- Password column fix --> */}
-        <span className="flex flex-1 px-2 py-1 min-w-0 z-10  bg-violet-500 items-center justify-between border-l-1 border-y-1 ">
-          <div className="bg-pink-200 flex">
+        <span className="flex flex-[1.5] px-2 py-1 min-w-0 z-10  bg-violet-500 items-center justify-between border-l-1 border-y-1 ">
+          <div className=" flex w-full items-center">
             <input
             onClick={() => handleCopyClick()}
             id={`${eyeOpen ? id : ""}`}
@@ -110,7 +105,7 @@ const EachRow = ({
               eyeOpen ? "hover:cursor-pointer" : "hover:cursor-not-allowed"
             } 
             font-mono px-1 py-1
-             truncate border-2
+             flex-1 min-w-0 truncate 
             `}
             value={eyeOpen && eyeOpenAfterPin ? cipherPassword : password}
             readOnly
@@ -134,7 +129,7 @@ const EachRow = ({
           href={url}
           target="_blank"
           rel="noopener"
-          className="flex-1 px-2 py-1 bg-sky-500 text-wrap min-w-0 border-y-1 border-l-1 hover:underline transition-all duration-300"
+          className="flex-1 px-2 py-1 bg-sky-500 text-wrap min-w-0 border-y-1 border-l-1 hover:underline transition-all duration-300 break-words"
         >
           {/* <-- THIS IS YOUR FIX: removed truncate, added min-w-0 & items-start */}
           {url}

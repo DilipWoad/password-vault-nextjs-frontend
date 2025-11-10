@@ -168,7 +168,7 @@ const userPasswordVault = () => {
             <span className="bg-lime-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
               Username
             </span>
-            <span className="bg-violet-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
+            <span className="bg-violet-500 flex flex-[1.5] px-2 py-1 justify-center border-y-1 border-l-1">
               Password
             </span>
             <span className="bg-sky-500 px-2 flex flex-1  py-1 justify-center border-y-1 border-l-1">
