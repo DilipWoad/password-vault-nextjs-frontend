@@ -116,7 +116,7 @@ const AddToVault = ({
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 ">
       <form
         onSubmit={createVault}
-        className="bg-white w-4/12  flex flex-col gap-5 p-4 rounded-lg shadow-lg"
+        className="bg-white flex flex-col gap-5 p-4 rounded-lg shadow-lg"
       >
         <p className="text-2xl p-2 font-semibold">Add to Vault</p>
 
@@ -176,8 +176,8 @@ const AddToVault = ({
           stateValue={vaultForm.note}
           required={false}
           stateFunction={setVaultForm}
-          divCss={"items-start"}
-          textAreaCss={"ml-10 "}
+          divCss={"items-start flex-col"}
+          textAreaCss={"w-full"}
         />
         <div className="flex gap-4 justify-end text-white ">
           <button

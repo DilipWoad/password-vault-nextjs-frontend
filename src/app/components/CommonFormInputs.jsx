@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 const CommonFormInputs = ({
   label,
   type = "text",
@@ -11,8 +15,16 @@ const CommonFormInputs = ({
   isTextArea,
   textAreaRows,
   textAreaMaxLength,
-  textAreaCss
+  textAreaCss,
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleInputFocus = () => {
+    setIsFocused(true);
+  };
+  const handleInputBlur = () => {
+    setIsFocused(false);
+  };
   const handleVaultFormChange = (e) => {
     const { name, value } = e.target;
 
@@ -24,15 +36,16 @@ const CommonFormInputs = ({
   return (
     <div className={`flex justify-between items-center ${divCss}`}>
       <label
-        className="w-1/4 p-2 flex justify-between font-semibold font-mono"
+        className="w-22 py-2 flex justify-between font-semibold font-mono"
         htmlFor={name}
       >
-        {label} <span>:</span>{" "}
+        <p>{label} </p>
+        <span className="">:</span>
       </label>
 
       {isTextArea ? (
         <textarea
-          className={`bg-gray-200 p-2 rounded-lg ml-2 flex-1 ${textAreaCss}`}
+          className={`bg-gray-200 p-2 rounded-lg h-32 ${textAreaCss} focus:outline-2 focus:outline-offset-1 focus:outline-blue-700`}
           type={type}
           name={name}
           id={id}
@@ -42,10 +55,12 @@ const CommonFormInputs = ({
           placeholder={`Enter ${name}...`}
           required={required}
           onChange={handleVaultFormChange}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
         />
       ) : (
         <input
-          className={`bg-gray-200 flex-1 ml-2 p-2 rounded-lg ${inputCss}`}
+          className={`bg-gray-200 flex-1 ml-2 p-2 rounded-lg focus:outline-2 focus:outline-offset-1 focus:outline-blue-700 ${inputCss}`}
           type={type}
           name={name}
           id={id}
@@ -53,6 +68,8 @@ const CommonFormInputs = ({
           placeholder={`Enter ${name}...`}
           required={required}
           onChange={handleVaultFormChange}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
         />
       )}
     </div>

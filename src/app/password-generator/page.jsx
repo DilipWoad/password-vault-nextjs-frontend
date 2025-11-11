@@ -197,9 +197,9 @@ const passwordGenerator = () => {
           Generate Pin
         </button>
       </div>
-      <div className="bg-white w-6/12 h-8/12 rounded-4xl shadow-2xl overflow-hidden flex flex-col">
+      <div className="bg-red-500 w-6/12 h-8/12 rounded-4xl shadow-2xl overflow-hidden flex flex-col">
         {/* Display Field + copy button div */}
-        <div className="bg-red-500 flex px-20 py-10 items-center">
+        <div className=" flex px-20 py-10 items-center">
           <div className="flex-1 relative">
             <div id="password-display" className="bg-green-500 p-2 rounded-md">
               {generatedPassword || "Your Password Here"}
@@ -222,8 +222,8 @@ const passwordGenerator = () => {
           </button>
         </div>
         {/* container for length slidder + all char selector */}
-        <div className="bg-sky-500 flex-1 flex flex-col items-center justify-center gap-4">
-          <div className="bg-green-500 w-8/12">
+        <div className=" flex-1 flex flex-col items-center justify-center gap-4">
+          <div className=" w-8/12">
             <h2>Password Length: {sliderValue}</h2>
             <input
               type="range"
@@ -233,12 +233,12 @@ const passwordGenerator = () => {
               onChange={handleSliderChnage}
               className="w-full"
             />
-            <div className="bg-red-500 flex justify-between font-semibold">
+            <div className="flex justify-between font-semibold">
               <p>4</p>
               <p>32</p>
             </div>
           </div>
-          <div className="bg-pink-500 flex w-6/12 justify-between mt-8 p-2 font-semibold">
+          <div className="flex w-6/12 justify-between mt-8 p-2 font-semibold">
             <div>
               <input
                 type="checkbox"
