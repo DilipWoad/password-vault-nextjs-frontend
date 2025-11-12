@@ -15,6 +15,8 @@ const UserPin = ({
   cipherPassword,
   setCipherPassword,
   initializationVectorBase64,
+  setShowEditForm,
+  isEditForm,
 }) => {
   const inputRef = useRef([]);
   const [eachPin, setEachPin] = useState(["", "", "", ""]);
@@ -98,15 +100,19 @@ const UserPin = ({
           initializationVectorBase64,
           cipherPassword
         );
-        console.log("Decoded Password is  :: ",truePassword)
+        console.log("Decoded Password is  :: ", truePassword);
         setCipherPassword(truePassword);
         setShowPin(false);
       } else {
         setError("Invalid Pin");
       }
-
-      setEyeOpenAfterPin(res.data.data);
-      setEyeOpen(res.data.data);
+      if (!isEditForm) {
+        setEyeOpenAfterPin(res.data.data);
+        setEyeOpen(res.data.data);
+      } else {
+        setShowEditForm(res.data.data);
+        //need to update the vault data with new
+      }
     } catch (error) {
       console.error("Error while checking user pin. :: ", error);
     }

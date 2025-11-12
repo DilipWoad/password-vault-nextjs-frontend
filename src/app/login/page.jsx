@@ -10,7 +10,7 @@ import { useEncryptionContext } from "../utils/ContextApi/EncryptionContext.js";
 
 export default function login() {
   const loginFormObj = {
-    email: "dilip7@gmail.com",
+    email: "d12@gmail.com",
     password: "12345678",
   };
   const [loginDetails, setLoginDetails] = useState(loginFormObj);

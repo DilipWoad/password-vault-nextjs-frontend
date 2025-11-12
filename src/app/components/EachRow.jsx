@@ -158,7 +158,6 @@ const EachRow = ({
           initializationVectorBase64={iv}
         />
       )}
-      {/* {showGeneratePinBox && eyeOpen && <PinForm setShowGeneratePinBox={setShowGeneratePinBox}/> } */}
     </div>
   );
 };
