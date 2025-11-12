@@ -76,7 +76,7 @@ const userPasswordVault = () => {
       setShowCopiedStatus(true);
     }
 
-    // passwordDisplay?.setSelectionRange(0, 0);
+    passwordDisplay.setSelectionRange(0, 0);
   };
 
   const handleDeleteClick = () => {
