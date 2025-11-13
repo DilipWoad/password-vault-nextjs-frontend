@@ -283,7 +283,8 @@ const PasswordGenerator = () => { // Renamed for convention
       {showAddToVaultForm && (
         <AddToVault
           setShowAddToVaultForm={setShowAddToVaultForm}
-          generatedPassword={generatedPassword} // Pass the generated password to AddToVault
+          setGeneratedPassword={setGeneratedPassword}
+          fromGenerator={true}
         />
       )}
     </div>

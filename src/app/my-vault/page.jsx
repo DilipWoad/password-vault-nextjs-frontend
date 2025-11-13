@@ -15,6 +15,7 @@ import {
   useEncryptionContext,
 } from "../utils/ContextApi/EncryptionContext.js";
 import { redirect } from "next/navigation";
+import UserPin from "../components/UserPin.jsx";
 
 
 const userPasswordVault = () => {
@@ -30,13 +31,13 @@ const userPasswordVault = () => {
   const [disablePinButton, setDisablePinButton] = useState(true);
   const [pinExists, setPinExists] = useState(false);
   const [showGeneratePinBox, setShowGeneratePinBox] = useState(false);
+  const [showPin, setShowPin] = useState(false);
+  const [cipherPassword,setCipherPassword] = useState(null);
+
 
   ///////////
   const { sessionEncryptionKey } = useContext(EncryptionContext);
-
   ///////////
-  // const [copyEmpty, setCopyEmpty] = useState(false);
-  // const [count,setCount]=useState(0);
 
   const getVault = async () => {
     setLoading(true);
@@ -56,7 +57,13 @@ const userPasswordVault = () => {
 
   // console.log("Vault after deletion : ", arrayAfterDeletion);
   const handleEditClick = () => {
-    setShowEditForm(true);
+    //show the pinForm
+    //if pinform return true then setShowEditForm
+    //else -> return false return from here
+    console.log("Edit Vault :: ",editVault)
+    //only thing happen here is show User Pin\
+    setShowPin(true)
+    // setShowEditForm(true);
   };
 
   const handleCopyClick = async () => {
@@ -76,7 +83,7 @@ const userPasswordVault = () => {
       setShowCopiedStatus(true);
     }
 
-    // passwordDisplay?.setSelectionRange(0, 0);
+    passwordDisplay.setSelectionRange(0, 0);
   };
 
   const handleDeleteClick = () => {
@@ -240,12 +247,28 @@ const userPasswordVault = () => {
           />
         )}
         {loading && <LoadingScreen />}
+
+        {showPin && (
+        <UserPin
+          setShowPin={setShowPin}
+          // setDisablePinButton={setDisablePinButton}
+          // setEyeOpenAfterPin={setEyeOpenAfterPin}
+          // setEyeOpen={setEyeOpen}
+          setShowEditForm={setShowEditForm}
+          setCipherPassword={setCipherPassword}
+          cipherPassword={editVault.password}
+          initializationVectorBase64={editVault.iv}
+          setSelectedRow={setSelectedRow}
+          setEditVault={setEditVault}
+          isEditForm={true}
+        />
+      )}
         {showEditForm && (
           <AddToVault
             setShowAddToVaultForm={setShowEditForm}
             setVaults={setVaults}
             vaults={vaults}
-            editVault={editVault}
+            editVault={{...editVault,password:cipherPassword}}
             isEdit={true}
             setSelectedRow={setSelectedRow}
           />

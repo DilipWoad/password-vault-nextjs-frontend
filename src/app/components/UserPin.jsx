@@ -15,6 +15,10 @@ const UserPin = ({
   cipherPassword,
   setCipherPassword,
   initializationVectorBase64,
+  setShowEditForm,
+  isEditForm,
+  setSelectedRow,
+  setEditVault
 }) => {
   const inputRef = useRef([]);
   const [eachPin, setEachPin] = useState(["", "", "", ""]);
@@ -40,7 +44,7 @@ const UserPin = ({
     // and it is not the last input feild
     //if value is added move to the next input
     if (value.length === 1 && index < length - 1) {
-      console.log("Each input element :", inputRef.current);
+      // console.log("Each input element :", inputRef.current);
       inputRef.current[index + 1]?.focus();
     }
 
@@ -93,33 +97,46 @@ const UserPin = ({
       console.log("Gen pin value : ", res.data.data);
       if (res.data.data) {
         //decrypt pass here
+        console.log("Decrypting after pin is true :: ", { sessionEncryptionKey,
+          initializationVectorBase64,
+          cipherPassword})
         const truePassword = await decryptPassword(
           sessionEncryptionKey,
           initializationVectorBase64,
           cipherPassword
         );
-        console.log("Decoded Password is  :: ",truePassword)
+        console.log("Decoded Password is  :: ", truePassword);
         setCipherPassword(truePassword);
         setShowPin(false);
       } else {
         setError("Invalid Pin");
       }
-
-      setEyeOpenAfterPin(res.data.data);
-      setEyeOpen(res.data.data);
+      if (!isEditForm) {
+        setEyeOpenAfterPin(res.data.data);
+        setEyeOpen(res.data.data);
+      } else {
+        setShowEditForm(res.data.data);
+        //need to update the vault data with new
+      }
     } catch (error) {
       console.error("Error while checking user pin. :: ", error);
     }
   };
 
   const handlePinCancelClick = () => {
-    setEyeOpenAfterPin(false);
-    setShowPin(false);
+    if (!isEditForm) {
+      setEyeOpenAfterPin(false);
     setEyeOpen(false);
+      
+    }else{
+      setSelectedRow([])
+      setEditVault("")
+    }
+    setShowPin(false);
   };
 
-  console.log("Each pin : ", eachPin);
-  console.log("Pin :", pin);
+  // console.log("Each pin : ", eachPin);
+  // console.log("Pin :", pin);
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className=" bg-black/85 rounded-md h-auto flex flex-col justify-between p-2 font-mono">

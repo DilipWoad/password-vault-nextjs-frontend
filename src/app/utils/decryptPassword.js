@@ -32,6 +32,8 @@ export const decryptPassword = async (
     const cipher_buffer = base64ToBuffer(cipherText_base64);
 
     //Decryption
+    console.log("IV_buffer ::",iv_buffer)
+    console.log("cipher_buffer ::",cipher_buffer)
     const decryptBuffer = await crypto.subtle.decrypt(
         {name:"AES-GCM",iv:iv_buffer},
         sessionEncryptionKey,
