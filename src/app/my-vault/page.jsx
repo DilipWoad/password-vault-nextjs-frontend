@@ -258,6 +258,8 @@ const userPasswordVault = () => {
           setCipherPassword={setCipherPassword}
           cipherPassword={editVault.password}
           initializationVectorBase64={editVault.iv}
+          setSelectedRow={setSelectedRow}
+          setEditVault={setEditVault}
           isEditForm={true}
         />
       )}

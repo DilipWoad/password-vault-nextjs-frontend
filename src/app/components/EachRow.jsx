@@ -20,7 +20,7 @@ const EachRow = ({
   const [eyeOpen, setEyeOpen] = useState(false);
   const [eyeOpenAfterPin, setEyeOpenAfterPin] = useState(false);
   const [showPin, setShowPin] = useState(false);
-  const [cipherPassword, setCipherPassword] = useState(password);
+  const [cipherPassword, setCipherPassword] = useState("");
 
   const isChecked = selectedRow.includes(_id);
 
@@ -31,7 +31,7 @@ const EachRow = ({
       setSelectedRow([...selectedRow, _id]);
     } else {
       //remove from the array
-      console.log(_id);
+      // console.log(_id);
       const newArray = selectedRow.filter((vaultId) => vaultId !== _id);
       setSelectedRow(newArray);
     }
@@ -51,13 +51,17 @@ const EachRow = ({
       setShowPin(true);
     }
   };
-  console.log(`After pin click : ${eyeOpenAfterPin} :: eyeOpen : ${eyeOpen}`);
+
+  useEffect(()=>{
+    setCipherPassword(password)
+  },[password]);
+  // console.log(`After pin click : ${eyeOpenAfterPin} :: eyeOpen : ${eyeOpen}`);
   useEffect(() => {
-    console.log("Outer running console....");
+    // console.log("Outer running console....");
     if (eyeOpen && eyeOpenAfterPin) {
-      console.log("Inner running console....");
+      // console.log("Inner running console....");
       const closeEyeTimer = setTimeout(() => {
-        console.log("Timer to close the eye start here ::....");
+        // console.log("Timer to close the eye start here ::....");
         setEyeOpen(false);
         setEyeOpenAfterPin(false);
         setCipherPassword(password);
@@ -65,6 +69,9 @@ const EachRow = ({
       return () => clearTimeout(closeEyeTimer);
     }
   }, [eyeOpen, eyeOpenAfterPin]);
+
+  console.log("Password that was passed from the page ::: ",password)
+  console.log("Cipher Text :: in each row for control and uncontrol :: ",cipherPassword)
 
   return (
     <div className="flex relative font-mono ">
@@ -103,7 +110,7 @@ const EachRow = ({
             font-mono px-1 py-1
              flex-1 min-w-0 truncate 
             `}
-              value={eyeOpen && eyeOpenAfterPin ? cipherPassword : password}
+              value={eyeOpen && eyeOpenAfterPin ? cipherPassword : password} //here error of controll and uncroll due to value changed from defined to undefined due to error
               readOnly
             ></input>
             <div
@@ -118,9 +125,13 @@ const EachRow = ({
               />
             </div>
             <button
-            onClick={() => handleCopyClick()}
+              onClick={() => handleCopyClick()}
               disabled={!(eyeOpen && eyeOpenAfterPin)}
-              className={` text-sm font-semibold tracking-tighter px-0.5 py-1 rounded-md ml-1 transition-all duration-300  ${(eyeOpen && eyeOpenAfterPin) ? "cursor-pointer hover:bg-gray-400  bg-gray-300" : "cursor-not-allowed hover:bg-gray-400 bg-gray-300 text-slate-500"}`}
+              className={` text-sm font-semibold tracking-tighter px-0.5 py-1 rounded-md ml-1 transition-all duration-300  ${
+                eyeOpen && eyeOpenAfterPin
+                  ? "cursor-pointer hover:bg-gray-400  bg-gray-300"
+                  : "cursor-not-allowed hover:bg-gray-400 bg-gray-300 text-slate-500"
+              }`}
             >
               Copy
             </button>

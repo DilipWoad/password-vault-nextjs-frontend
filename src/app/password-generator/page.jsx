@@ -299,6 +299,7 @@ const passwordGenerator = () => {
         <AddToVault
           setShowAddToVaultForm={setShowAddToVaultForm}
           setGeneratedPassword={setGeneratedPassword}
+          fromGenerator={true}
         />
       )}
     </div>
