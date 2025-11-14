@@ -127,7 +127,7 @@ const EachRow = ({
             <button
               onClick={() => handleCopyClick()}
               disabled={!(eyeOpen && eyeOpenAfterPin)}
-              className={` text-sm font-semibold tracking-tighter px-0.5 py-1 rounded-md ml-1 transition-all duration-300  ${
+              className={` md:text-sm font-semibold tracking-tighter px-0.5 py-1 rounded-md ml-1 transition-all duration-300 flex-shrink-1 min-w-0 text-[8px] md:bg-gray-300 ${
                 eyeOpen && eyeOpenAfterPin
                   ? "cursor-pointer hover:bg-gray-400  bg-gray-300"
                   : "cursor-not-allowed hover:bg-gray-400 bg-gray-300 text-slate-500"

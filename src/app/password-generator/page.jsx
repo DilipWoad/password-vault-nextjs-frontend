@@ -263,10 +263,10 @@ const PasswordGenerator = () => { // Renamed for convention
             onMouseEnter={() => setShowArrow(true)}
             onMouseLeave={() => setShowArrow(false)}
             onClick={handleGoToVaultClick}
-            className="bg-gray-600 text-gray-100 font-semibold px-6 py-3 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 active:bg-gray-700 transition-colors flex items-center"
+            className={`bg-gray-600 text-gray-100 font-semibold px-6 py-3 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 active:bg-gray-700 transition-colors flex items-center`}
           >
             Go to Vault
-            <span className={`ml-2 transform transition-transform duration-300 ${showArrow ? 'translate-x-1' : ''}`}>
+            <span className={`ml-2 transform transition-transform duration-300 ${showArrow ? 'translate-x-2' : ''}`}>
               {`→`}
             </span>
           </button>

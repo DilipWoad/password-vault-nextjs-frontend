@@ -144,7 +144,7 @@ const userPasswordVault = () => {
   return (
     <ShowPasswordContextProvider>
       <div className="bg-red-500 flex items-center justify-center h-screen relative">
-        <div className="bg-green-500 w-auto pt-2 pb-4 px-10 rounded-lg ">
+        <div className="bg-green-500 pt-2 pb-4 px-10 rounded-lg flex-shrink-1 min-w-0 ">
           <div className=" flex justify-between mb-4 mt-5  text-sm  font-mono font-semibold">
             <button
               disabled={selectedRow.length < 1}
@@ -180,19 +180,19 @@ const userPasswordVault = () => {
           {/* table header + rows */}
           <div className="bg-blue-500 flex justify-between font-mono font-semibold text-xl  ">
             {/* <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1 text-sm">Select</span> */}
-            <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
+            <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1 min-w-0 truncate">
               Title
             </span>
-            <span className="bg-lime-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
+            <span className="bg-lime-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1 min-w-0 truncate">
               Username
             </span>
-            <span className="bg-violet-500 flex flex-[1.5] px-2 py-1 justify-center border-y-1 border-l-1">
+            <span className="bg-violet-500 flex flex-[1.5] px-2 py-1 justify-center border-y-1 border-l-1 min-w-0 truncate">
               Password
             </span>
-            <span className="bg-sky-500 px-2 flex flex-1  py-1 justify-center border-y-1 border-l-1">
+            <span className="bg-sky-500 px-2 flex flex-1  py-1 justify-center border-y-1 border-l-1 min-w-0 truncate">
               URL
             </span>
-            <span className="rounded-tr-lg bg-yellow-500 px-2 flex flex-1 py-1 justify-center border-y-1 border-x-1">
+            <span className="rounded-tr-lg bg-yellow-500 px-2 flex flex-1 py-1 justify-center border-y-1 border-x-1 min-w-0 truncate">
               Note
             </span>
           </div>
