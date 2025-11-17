@@ -84,11 +84,13 @@ const PasswordGenerator = () => { // Renamed for convention
   };
 
   const handleCopyClick = async () => {
-    const textToCopy = generatedPassword;
-    if (textToCopy && textToCopy !== "Select at least one option") {
-      await copyToClipBoard(textToCopy);
-      setShowCopiedStatus(true);
-    }
+    //get the display-password div element
+    const passwordDisplay = document.getElementById("password-display");
+    // console.log("Password Display : ",passwordDisplay.innerHTML)
+    const text = passwordDisplay.innerHTML;
+    await copyToClipBoard(text);
+    setShowCopiedStatus(true);
+    setGeneratedPassword("")
   };
 
   // Effect for "Copied!" toast animation
