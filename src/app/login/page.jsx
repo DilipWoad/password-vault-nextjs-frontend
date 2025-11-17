@@ -110,7 +110,7 @@ export default function login() {
         >
           Login
         </button>
-        <p className="bg-green-500 text-center text-sm">
+        <p className=" text-center text-sm">
           New to the website?
           <span
             className="hover:cursor-pointer hover:text-underline mx-2  text-bold"

@@ -112,7 +112,7 @@ const userPasswordVault = () => {
     if (!sessionEncryptionKey) {
       console.log("No key in memory. Redirecting to login.");
 
-      // redirect("/login");
+      redirect("/login");
     }
     getVault();
     const VaultPinExists = userPinExists();
@@ -180,7 +180,7 @@ const userPasswordVault = () => {
           {/* table header + rows */}
           <div className="bg-blue-500 flex justify-between font-mono font-semibold text-xl">
             {/* <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1 text-sm">Select</span> */}
-            <span className="rounded-tl-lg flex flex-[0.5] bg-indigo-600 border-y-1 border-l-1 min-w-0">
+            <span className="rounded-tl-lg flex flex-[0.5] bg-indigo-600 border-y-1 border-l-1 flex-shrink-0">
             </span>
             <span className="bg-pink-500 flex flex-2 px-2 py-1 justify-center border-y-1 border-l-1">
               Title

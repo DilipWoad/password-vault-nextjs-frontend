@@ -80,7 +80,7 @@ const EachRow = ({
     <div className="flex relative font-mono ">
       <div className="flex text-sm w-full">
         <span
-          className={`border-y-1 border-l-1 flex flex-[0.5] justify-center items-center bg-indigo-600 ${
+          className={`border-y-1 border-l-1 flex flex-[0.5] justify-center items-center bg-indigo-600 flex-shrink-0 ${
             vaultArrayLen - 1 === vaultIndex ? "rounded-bl-lg" : ""
           }`}
         >
