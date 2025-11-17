@@ -121,8 +121,9 @@ const passwordGenerator = () => {
     const passwordDisplay = document.getElementById("password-display");
     // console.log("Password Display : ",passwordDisplay.innerHTML)
     const text = passwordDisplay.innerHTML;
-    copyToClipBoard(text);
+    await copyToClipBoard(text);
     setShowCopiedStatus(true);
+    setGeneratedPassword("")
   };
 
   const userPinExists = async () => {

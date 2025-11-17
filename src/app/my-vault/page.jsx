@@ -112,7 +112,7 @@ const userPasswordVault = () => {
     if (!sessionEncryptionKey) {
       console.log("No key in memory. Redirecting to login.");
 
-      redirect("/login");
+      // redirect("/login");
     }
     getVault();
     const VaultPinExists = userPinExists();
@@ -143,8 +143,8 @@ const userPasswordVault = () => {
   }
   return (
     <ShowPasswordContextProvider>
-      <div className="bg-red-500 flex items-center justify-center h-screen relative">
-        <div className="bg-green-500 w-auto pt-2 pb-4 px-10 rounded-lg ">
+      <div className="bg-red-500 flex items-center justify-center h-screen relative flex-shrink-1">
+        <div className="bg-green-500 w-auto pt-2 pb-4 px-10 rounded-lg flex-shrink-1 ">
           <div className=" flex justify-between mb-4 mt-5  text-sm  font-mono font-semibold">
             <button
               disabled={selectedRow.length < 1}
@@ -178,21 +178,23 @@ const userPasswordVault = () => {
             </div>
           </div>
           {/* table header + rows */}
-          <div className="bg-blue-500 flex justify-between font-mono font-semibold text-xl  ">
+          <div className="bg-blue-500 flex justify-between font-mono font-semibold text-xl">
             {/* <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1 text-sm">Select</span> */}
-            <span className="rounded-tl-lg bg-pink-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
+            <span className="rounded-tl-lg flex flex-[0.5] bg-indigo-600 border-y-1 border-l-1 min-w-0">
+            </span>
+            <span className="bg-pink-500 flex flex-2 px-2 py-1 justify-center border-y-1 border-l-1">
               Title
             </span>
-            <span className="bg-lime-500 flex flex-1 px-2 py-1 justify-center border-y-1 border-l-1">
+            <span className="bg-lime-500 flex flex-2 px-2 py-1 justify-center border-y-1 border-l-1">
               Username
             </span>
-            <span className="bg-violet-500 flex flex-[1.5] px-2 py-1 justify-center border-y-1 border-l-1">
+            <span className="bg-violet-500 flex flex-[2.5] px-2 py-1 justify-center border-y-1 border-l-1">
               Password
             </span>
-            <span className="bg-sky-500 px-2 flex flex-1  py-1 justify-center border-y-1 border-l-1">
+            <span className="bg-sky-500 px-2 flex flex-2  py-1 justify-center border-y-1 border-l-1">
               URL
             </span>
-            <span className="rounded-tr-lg bg-yellow-500 px-2 flex flex-1 py-1 justify-center border-y-1 border-x-1">
+            <span className="rounded-tr-lg bg-yellow-500 px-2 flex flex-2 py-1 justify-center border-y-1 border-x-1">
               Note
             </span>
           </div>

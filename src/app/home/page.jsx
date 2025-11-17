@@ -10,7 +10,7 @@ const vaultPage = () => {
     if (!sessionEncryptionKey) {
       console.log("No key in memory. Redirecting to login.");
       
-      redirect("/login");
+      // redirect("/login");
     }
   }, [sessionEncryptionKey]);
   if (!sessionEncryptionKey) {
