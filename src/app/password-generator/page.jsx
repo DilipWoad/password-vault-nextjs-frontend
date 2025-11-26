@@ -90,7 +90,7 @@ const PasswordGenerator = () => { // Renamed for convention
     const text = passwordDisplay.innerHTML;
     await copyToClipBoard(text);
     setShowCopiedStatus(true);
-    setGeneratedPassword("")
+    // setGeneratedPassword("")
   };
 
   // Effect for "Copied!" toast animation
