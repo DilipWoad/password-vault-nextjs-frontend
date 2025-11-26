@@ -87,10 +87,19 @@ const PasswordGenerator = () => { // Renamed for convention
     //get the display-password div element
     const passwordDisplay = document.getElementById("password-display");
     // console.log("Password Display : ",passwordDisplay.innerHTML)
-    const text = passwordDisplay.innerHTML;
-    await copyToClipBoard(text);
-    setShowCopiedStatus(true);
+    // const text = passwordDisplay.innerHTML;
+    // await copyToClipBoard(text);
+    // setShowCopiedStatus(true);
     // setGeneratedPassword("")
+    if (passwordDisplay) {
+      const selected = passwordDisplay?.select();
+      console.log("Selected text :: ", selected);
+      document?.execCommand("copy");
+      setShowCopiedStatus(true);
+     setGeneratedPassword("")
+    }
+
+    passwordDisplay.setSelectionRange(0, 0);
   };
 
   // Effect for "Copied!" toast animation
