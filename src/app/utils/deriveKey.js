@@ -1,9 +1,9 @@
 export const deriveKey = async(master_password,salt)=>{
     try {
         const enc = new TextEncoder();
-        console.log("TextEncoder object :: ",enc);
+        // console.log("TextEncoder object :: ",enc);
         const passwordBuffer = enc.encode(master_password);
-        console.log("Password Buffer :: ",passwordBuffer);
+        // console.log("Password Buffer :: ",passwordBuffer);
 
         const importedKey = await crypto.subtle.importKey(
             'raw',
@@ -13,7 +13,7 @@ export const deriveKey = async(master_password,salt)=>{
             ['deriveKey']
         )
 
-        console.log("Imported Key :: ",importedKey);
+        // console.log("Imported Key :: ",importedKey);
 
         return await crypto.subtle.deriveKey({
             name:"PBKDF2",

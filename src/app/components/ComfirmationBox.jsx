@@ -35,7 +35,6 @@ const ComfirmationBox = ({
       //but the request are waiting for each to finished so it lead to longer time
       //so we should do is promis.All to resolve all the pending promise in parallel
       const res = await Promise.all(deleteArrayOfPromises);
-      console.log(res);
       //now remove the vault from the ui
       const arrayAfterDeletion = vaults.filter(
         (vault) => !selectedRow.includes(vault._id)

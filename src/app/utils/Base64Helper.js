@@ -10,7 +10,7 @@ export const bufferToBase64 = (bufferString)=>{
     
     for(let i=0;i<len;i++){
         binaryString+= String.fromCharCode(bytes[i])
-        console.log(binaryString)
+        // console.log(binaryString)
     }
     //now we have ascii string club together
     //now convert it to base64 with the help of btoa
@@ -31,7 +31,7 @@ export const base64ToBuffer =(base64String)=>{
     //so now we need to fill the array[index] with binaryStringChar[index] value;
     for(let i=0;i<binaryString_length;i++){
         bytesArray[i] = binaryString.charCodeAt(i);
-        console.log(bytesArray)
+        // console.log(bytesArray)
     }
 
     //now we have bytesArray with [154,92,54,255];

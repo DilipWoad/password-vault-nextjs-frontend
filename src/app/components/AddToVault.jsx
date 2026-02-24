@@ -31,20 +31,16 @@ const AddToVault = ({
   };
 
   const [vaultForm, setVaultForm] = useState(vaultFormObj);
-  console.log("The Vault form before sending ::: ",vaultForm)
 
   const createVault = async (e) => {
     // let redirectPath = null;
     e.preventDefault();
-    console.log("Inside Generate Vault.");
-    console.log("Vault form : ", vaultForm);
 
     setLoading(true);
     const encryptedPassword = await encryptPassword(
       sessionEncryptionKey,
       vaultForm.password
     );
-    console.log("The generation of cipher and iv :: ",{encryptedPassword})
     try {
       if (!isEdit) {
         const res = await axios.post(
@@ -58,10 +54,7 @@ const AddToVault = ({
             withCredentials: true,
           }
         );
-        console.log(res.data);
-        // console.log("Does this add to the vault ? ", vaults);
         fromGenerator && setGeneratedPassword("");
-        // console.log([...vaults, res.data.data])
         !fromGenerator && setVaults([...vaults, res.data.data]);
         setShowAddToVaultForm(false);
       } else {
@@ -76,7 +69,6 @@ const AddToVault = ({
             withCredentials: true,
           }
         );
-        console.log("edited data :: ", res.data);
         //so we have vaults aready ->
         //i need to find that obj in vaults -> with prev in setVults
         //after finding i can change the data with new
@@ -86,7 +78,6 @@ const AddToVault = ({
           }
           return vault;
         })
-        console.log("Does this updated the vault ? ", updatedVault);
         setVaults(updatedVault);
         setSelectedRow([]);
         // setShowAddToVaultForm(false);
@@ -102,7 +93,6 @@ const AddToVault = ({
 
   const handleCancelVaultForm = () => {
     if (isEdit) {
-      console.log("is cancel form?");
       setSelectedRow([]);
     }
     setShowAddToVaultForm(false);

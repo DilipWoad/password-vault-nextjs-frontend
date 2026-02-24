@@ -11,7 +11,6 @@ const PinForm = ({showGeneratePinBox,setShowGeneratePinBox}) => {
   const [loading, setLoading] = useState(false);
   const generatePin = async () => {
     // let redirectPath = null;
-    console.log("Inside Generate Pin.")
     setLoading(true);
     try {
       const res = await axios.patch(
@@ -21,7 +20,6 @@ const PinForm = ({showGeneratePinBox,setShowGeneratePinBox}) => {
           withCredentials: true,
         }
       );
-      console.log(res.data);
       //   redirectPath = "/home";
       setShowGeneratePinBox(false);
       setLoading(false);
@@ -42,7 +40,6 @@ const PinForm = ({showGeneratePinBox,setShowGeneratePinBox}) => {
       console.error("Pin and the retypePin are not same.");
       return;
     }
-    // console.log(loginDetails);
     await generatePin();
   };
 

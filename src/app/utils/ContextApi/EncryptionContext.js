@@ -7,7 +7,7 @@ export const EncryptionContextProvider = ({ children }) => {
   const [sessionEncryptionKey, setSessionEncryptionKey] = useState(null);
 
   const updateSessionEncryptionState = (newValue) => {
-    console.log("Updating State :: ",newValue)
+    // console.log("Updating State :: ",newValue)
     setSessionEncryptionKey(newValue);
   };
 

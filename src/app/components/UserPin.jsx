@@ -44,7 +44,6 @@ const UserPin = ({
     // and it is not the last input feild
     //if value is added move to the next input
     if (value.length === 1 && index < length - 1) {
-      // console.log("Each input element :", inputRef.current);
       inputRef.current[index + 1]?.focus();
     }
 
@@ -85,7 +84,6 @@ const UserPin = ({
         setDisablePinButton(false);
         //then call for creating pin
       }
-      console.log("igyuyufy", pin);
       const res = await axios.post(
         `${BASE_URL}/vault/pin/verify`,
         { pin },
@@ -94,18 +92,13 @@ const UserPin = ({
         }
       );
 
-      console.log("Gen pin value : ", res.data.data);
       if (res.data.data) {
         //decrypt pass here
-        console.log("Decrypting after pin is true :: ", { sessionEncryptionKey,
-          initializationVectorBase64,
-          cipherPassword})
         const truePassword = await decryptPassword(
           sessionEncryptionKey,
           initializationVectorBase64,
           cipherPassword
         );
-        console.log("Decoded Password is  :: ", truePassword);
         setCipherPassword(truePassword);
         setShowPin(false);
       } else {
@@ -135,8 +128,6 @@ const UserPin = ({
     setShowPin(false);
   };
 
-  // console.log("Each pin : ", eachPin);
-  // console.log("Pin :", pin);
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className=" bg-black/85 rounded-md h-auto flex flex-col justify-between p-2 font-mono">

@@ -42,11 +42,9 @@ const userPasswordVault = () => {
   const getVault = async () => {
     setLoading(true);
     try {
-      console.log("inside");
       const res = await axios.get(`${BASE_URL}/vault`, {
         withCredentials: true,
       });
-      console.log(res.data);
       setVaults(res.data.data);
     } catch (error) {
       console.log("Error while fetching user vault");
@@ -60,7 +58,6 @@ const userPasswordVault = () => {
     //show the pinForm
     //if pinform return true then setShowEditForm
     //else -> return false return from here
-    console.log("Edit Vault :: ",editVault)
     //only thing happen here is show User Pin\
     setShowPin(true)
     // setShowEditForm(true);
@@ -78,7 +75,6 @@ const userPasswordVault = () => {
     // }
     if (passwordDisplay) {
       const selected = passwordDisplay?.select();
-      console.log("Selected text :: ", selected);
       document?.execCommand("copy");
       setShowCopiedStatus(true);
     }
@@ -96,7 +92,6 @@ const userPasswordVault = () => {
         withCredentials: true,
       });
 
-      console.log("sdfghjkl;");
       return res.data.data.pinCreated;
     } catch (error) {
       console.error("Error while checking user Pin exists.");
@@ -108,7 +103,7 @@ const userPasswordVault = () => {
     setShowGeneratePinBox(true);
   };
   useEffect(() => {
-    console.log("SessionObj :: ", sessionEncryptionKey);
+    // console.log("SessionObj :: ", sessionEncryptionKey);
     if (!sessionEncryptionKey) {
       console.log("No key in memory. Redirecting to login.");
 
@@ -116,7 +111,7 @@ const userPasswordVault = () => {
     }
     getVault();
     const VaultPinExists = userPinExists();
-    console.log("Vault pin exists", VaultPinExists);
+    // console.log("Vault pin exists", VaultPinExists);
     setDisablePinButton(VaultPinExists);
     setPinExists(VaultPinExists);
   }, []);

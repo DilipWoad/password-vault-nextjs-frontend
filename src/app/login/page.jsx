@@ -32,10 +32,10 @@ export default function login() {
 
       // const salt = base64ToBuffer(res.data.data.user.enc_salt);
       const salt = Buffer.from(res.data.data.user.enc_salt, "base64");
-      console.log("salt :: ", salt);
+      // console.log("salt :: ", salt);
       // const sessionEncKey = await generateSessionEncryptionKey(master_password,salt);
       const sessionEncKey = await deriveKey(master_password, salt);
-      console.log("sessionEncKey ::", sessionEncKey);
+      // console.log("sessionEncKey ::", sessionEncKey);
       // setSessionEncryptionKey(sessionEncKey);
       updateSessionEncryptionState(sessionEncKey);
       setLoading(false);
